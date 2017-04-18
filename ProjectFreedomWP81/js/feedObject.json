@@ -1,0 +1,26 @@
+{
+    "media": {
+
+    },
+    "title": "", //title of the article
+    "link": url, //url of the article, if it is media it is source of the media file
+    "content": "", //HTML content of the article
+    "summary": "", //HTML content of the summary
+    "author": [{    //array with authors
+        "name": "",
+        "email": "" //either email address or url for authors website
+    }],
+    "published": {
+        "original": "",
+        "updated": "",
+        "date": "", //final date
+        "articleDate": "", //date in format 01.01.2017
+        "articleDateName": "" //date in format Jan 1, 2017
+    },
+    "origLink": url, //url of the article if it is a media feed
+    "picture": url, //url of the picture for the article
+    "media": {
+        "src": url, //url of the media file
+        "duration": "" //duration of the media file
+    }
+}

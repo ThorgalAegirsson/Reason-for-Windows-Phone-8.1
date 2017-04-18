@@ -1,0 +1,31 @@
+﻿html {
+    overflow: auto;
+    -ms-overflow-style:-ms-autohiding-scrollbar;
+}
+
+.itempage .content {
+	margin-left: 20px;
+	margin-right: 20px;
+}
+
+.fragment header[role=banner] {
+    -ms-grid-rows: 3fr;
+    height: auto;
+    margin-left: 20px;
+}
+    .fragment header[role=banner] .titlearea {
+        white-space: normal;
+        font-weight: bolder;
+    }
+    .fragment header[role=banner] a {
+        text-decoration: none;
+    }
+    .fragment header[role=banner] .titlearea {
+        margin-left: 0px;
+    }
+
+.fragment .content {
+    font-size: 19pt;
+    margin-bottom:20px;
+
+}
