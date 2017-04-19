@@ -183,6 +183,15 @@
         return parser.parseFromString(content, 'text/html');
     }
 
+    //function ellipsizeTextBox(txt) { //not in use
+    //    let el = txt.parentElement;
+    //    let wordArray = el.innerHTML.split(' ');
+    //    while (el.scrollHeight > el.offsetHeight) {
+    //        wordArray.pop();
+    //        el.innerHTML = wordArray.join(' ') + '...';
+    //    }
+    //}
+
     //function authorString(authorsArray) {
     //    let authors = document.createElement('span');
     //    authorsArray.forEach(function (author) {
@@ -317,7 +326,7 @@
         let firstPic = contentHTML.getElementsByTagName('div')[0].getElementsByTagName('img')[0];
         if (firstPic) {
             feedObject.picture = firstPic.src;
-        } else if (currentFeed.imageUri) {
+        } else if (mediaFeed && currentFeed.imageUri) {
             feedObject.picture = currentFeed.imageUri.absoluteUri;
         } else {
             feedObject.picture = defaultPic;
@@ -353,8 +362,7 @@
 
 
     WinJS.Namespace.define('Reason', {
-        retrieve: retrieveFeed,
-       
+        retrieve: retrieveFeed,        
         allFeeds: ReasonFeed,
         refreshFeed: refreshFeed
     });
@@ -362,5 +370,6 @@
         cssUrl: WinJS.Binding.converter(function (url) {
             return "url('" + url + "')";
         }),
+        //ellipsizeTextBox: ellipsizeTextBox
     });
 })();

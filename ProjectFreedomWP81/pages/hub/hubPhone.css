@@ -215,10 +215,37 @@
     padding: 0;
 }
 
-.templatecontainer {
-    border-bottom: 1px solid white;
+.section3page .templatecontainer {
+    
 }
 
-/*.section3Page win-container {
+.section3page .itemcontainer {
+    max-height: 100px;
+    
+}
+
+.section3page .itemcontainer h3 {
+    font-size: 12pt;
+    line-height: 1.5em;
+}
+
+.section3page .itemcontainer h4 {
+    font-size: 10pt;
+    padding-top: 5px;
+    opacity: .8;
+}
+
+.section3page .win-container {
+    max-height: 100px;
+}
+
+.section3 .section3page .win-itemsblock .win-container {
     margin: 0;
-}*/
+    border-bottom: 1px solid gray;
+}
+
+.section3page .itemcontainer .titleDiv {
+    height: 3.5em;
+    line-height: 1.5em;
+    overflow: hidden;
+}
