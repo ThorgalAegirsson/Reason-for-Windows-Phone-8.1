@@ -13,14 +13,17 @@
     <div class="itempage fragment">
         <header aria-label="Header content" role="banner">
             <button id="backButton" data-win-control="WinJS.UI.BackButton"></button>
-            <h2 class="titlearea win-type-ellipsis">
-                <span class="pagetitle"></span>
+            <h2 class="titlearea">
+                <span class="pagetitle" data-win-bind="innerHTML: title"></span>
             </h2>
-            <h3 class="author"><a href="#"><span class="authorName"></span></a></h3>
-            <h4 class="date"><span class="dateName"></span></h4>
+            <h3 class="author" data-win-bind="innerHTML: author MyConverters.authorString">
+                <!--<a href="#"><span class="authorName"></span></a>-->
+            </h3>
+            <h4 class="date" data-win-bind="textContent: published.articleDateName"></h4>
         </header>
         <section class="content" aria-label="Main content" role="main">
-
+            <div class="articleContent"
+                 data-win-bind="innerHTML: content MyConverters.staticHTML"></div>
             <!-- TODO: Content goes here. -->
 
         </section>

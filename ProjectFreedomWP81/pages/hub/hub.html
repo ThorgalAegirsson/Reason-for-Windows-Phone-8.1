@@ -43,11 +43,18 @@
                 <div class="section3 section" data-win-control="WinJS.UI.PivotItem" data-win-options="{ header: 'Saved'}">
                     <div class="lvcontenthost sectioncontrol" id="section3contenthost" data-win-control="HubApps_SectionControls.Section3Control"
                          data-win-options="{
+                             layout: {type: WinJS.UI.ListLayout},
+                         }"></div>
+                </div>
+
+                <!--<div class="section3 section" data-win-control="WinJS.UI.PivotItem" data-win-options="{ header: 'Saved'}">
+                    <div class="lvcontenthost sectioncontrol" id="section3contenthost" data-win-control="HubApps_SectionControls.Section3Control"
+                         data-win-options="{
                              dataSource: select('.pagecontrol').winControl.section3DataSource,
                              layout: {type: WinJS.UI.ListLayout},
                              oniteminvoked: select('.pagecontrol').winControl.section3ItemNavigate 
                          }"></div>
-                </div>
+                </div>-->
 
                 <div class="section4 section" data-win-control="WinJS.UI.PivotItem" data-win-options="{ isHeaderStatic: true, header: 'ReasonTV' }" >
                     <div class="sectioncontrol" id="section4contenthost" data-win-control="HubApps_SectionControls.Section4Control"></div>

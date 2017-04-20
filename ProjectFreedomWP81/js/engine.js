@@ -183,6 +183,19 @@
         return parser.parseFromString(content, 'text/html');
     }
 
+    function processContent(contentHTML) {
+        const content = parseContent(contentHTML);
+        const imgs = content.querySelectorAll('img');
+        //debugger;
+        [].forEach.call(imgs, function (img) {
+            img.style.maxWidth = '100%';
+            img.style.height = 'auto';
+        });
+        let serializer = new XMLSerializer();
+        let contentString = serializer.serializeToString(content);
+        console.log(contentString);
+        return contentString;
+    }
     //function ellipsizeTextBox(txt) { //not in use
     //    let el = txt.parentElement;
     //    let wordArray = el.innerHTML.split(' ');
@@ -206,19 +219,21 @@
     //}
     
     function authorString(authorsArray) {
-        let authors = '';
-        let count = 0;
+        let authors = [];
         authorsArray.forEach(function (author) {
-            count++;
-            //let authorEl = '<a href="' + author.email + '">' + author.name + '</a>';
-            let authorEl = author.name;
-            if (count === 1) {
-                authors += authorEl;
-            } else {
-                authors += ', ' + authorEl;
-            }
+            let authorEl = '<a href="' + author.email + '">' + author.name + '</a>';
+            //let authorEl = author.name;
+            authors.push(authorEl);
         });
-        return authors;
+        return '<span>'+authors.join(', ')+'</span>';
+    }
+
+    function authorStringOnly(authorsArray) {
+        let authors = [];
+        authorsArray.forEach(function (author) {
+            authors.push(author.name);
+        });
+        return authors.join(', ');
     }
 
     function createFeedObj(currentItemIndex, feedArr) {
@@ -314,7 +329,8 @@
             //    feedObject.origLink = item.elementExtensions[i].nodeValue;
             //}
         }
-        feedObject.authors = authorString(feedObject.author);
+        feedObject.authors = authorStringOnly(feedObject.author);
+        feedObject.authorsWithLinks = authorString(feedObject.author);
         WinJS && WinJS.log('authors: ', 'createFeed', 'INFO');
         WinJS && WinJS.log(feedObject.authors, 'createFeed', 'INFO');
         WinJS && WinJS.log('original link: ' + feedObject.origLink, 'createFeed', 'INFO');
@@ -362,7 +378,8 @@
 
 
     WinJS.Namespace.define('Reason', {
-        retrieve: retrieveFeed,        
+        retrieve: retrieveFeed,
+        //currentFeed: 
         allFeeds: ReasonFeed,
         refreshFeed: refreshFeed
     });
@@ -370,6 +387,17 @@
         cssUrl: WinJS.Binding.converter(function (url) {
             return "url('" + url + "')";
         }),
+        authorString: WinJS.Binding.converter(function (authorlist) {
+            return authorString(authorlist);
+        }),
+        authorStringOnly: WinJS.Binding.converter(function (authorlist) {
+            return authorStringOnly(authorlist);
+        }),
+        staticHTML: WinJS.Binding.converter(function (element) {
+            //let contentHTML = window.toStaticHTML(element);
+            let contentHTML = processContent(element);
+            return window.toStaticHTML(contentHTML);
+        })
         //ellipsizeTextBox: ellipsizeTextBox
     });
 })();

@@ -15,17 +15,36 @@
 }
     .fragment header[role=banner] .titlearea {
         white-space: normal;
-        font-weight: bolder;
+        margin-left: 0px;
+        margin-bottom: 10px;
     }
+
+    .itempage.fragment header[role=banner] h2.titlearea .pagetitle {
+        line-height: 1.2;
+        font-weight: bold;
+    }
+
+    .fragment header[role=banner] .titlearea .pagetitle {
+        
+    }
+
     .fragment header[role=banner] a {
         text-decoration: none;
     }
-    .fragment header[role=banner] .titlearea {
-        margin-left: 0px;
+
+    .itempage.fragment header[role=banner] h3.author {
+        color: gray;
     }
 
-.fragment .content {
-    font-size: 19pt;
-    margin-bottom:20px;
+    .fragment header[role=banner] .date {
+        padding-top: 10px;
+        font-size: 12pt;
+    }
 
-}
+    .itempage.fragment section[role=main] .content>.articleContent {
+        font-size: 16pt;
+        margin-bottom:10px;
+
+    }
+
+        
