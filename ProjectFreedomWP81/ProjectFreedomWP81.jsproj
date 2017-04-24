@@ -62,6 +62,7 @@
     <Content Include="js\default.js" />
     <Content Include="js\engine.js" />
     <Content Include="js\feedObject.json" />
+    <Content Include="js\Helpers.js" />
     <Content Include="js\navigator.js" />
     <Content Include="pages\hub\hubPhone.css" />
     <Content Include="pages\hub\hub.html" />

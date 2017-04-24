@@ -249,3 +249,9 @@
     line-height: 1.5em;
     overflow: hidden;
 }
+
+.section3page .feedStatus {
+    margin-left: auto;
+    margin-right: auto;
+
+}

@@ -6,6 +6,7 @@
     let complete = false;
 
     //let feedArr = [];
+    let savedArticles = [];
     let currentFeed = null;
     let mediaFeed = false;
     let currentItemIndex = 0;
@@ -65,6 +66,7 @@
         client.setRequestHeader("User-Agent", "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)");
 
         client.retrieveFeedAsync(uri).then(function (feed) {
+            document.querySelector('.feedStatus').style.display = 'none';
             currentFeed = feed;
             WinJS.log && WinJS.log('Feed download complete', 'retrieveFeed retrieveFeedAsync', 'INFO');
             let title = '(no title)';
@@ -102,6 +104,7 @@
     }
 
     function onProgress() {
+        document.querySelector('.feedStatus').style.display = '';
         WinJS.log && WinJS.log('downloading...', 'retrieveFeed promise', 'INFO');
     }
 
@@ -110,6 +113,9 @@
         WinJS.log && WinJS.log("ERROR ERROR ERROR", 'retrieveFeed promise', 'ERROR');
         document.querySelector('.feedStatus').textContent = "Couldn't download the articles!!!";
         document.querySelector('.feedStatus').style.display = '';
+        window.setTimeout(function () {
+            document.querySelector('.feedStatus').style.display = 'none';
+        }, 5000);
         let errorStatus = Windows.Web.Syndication.SyndicationError.getStatus(err.number);
         if (errorStatus === Windows.Web.Syndication.SyndicationErrorStatus.invalidXml) console.log('An invalid XML exception was thrown. Please make sure to use a URI that points to a RSS or Atom feed');
     }
@@ -127,8 +133,12 @@
                 element.querySelector('.feedStatus').style.display = 'none';
             },
             function error() {
+                
                 element.querySelector('.feedStatus').innerHTML = "<p>Something went wrong. Do you have the internet connection? Try again later...</p>"
                 element.querySelector('.feedStatus').style.display = '';
+                let intervalID = window.setTimeout(function () {
+                    element.querySelector('.feedStatus').style.display = 'none';
+                }, 5000);
                 WinJS.log && WinJS.log("                                             ERROR ERROR ERROR", 'pageControl', 'INFO');
             },
             function progress(feedLength) {
@@ -381,7 +391,8 @@
         retrieve: retrieveFeed,
         //currentFeed: 
         allFeeds: ReasonFeed,
-        refreshFeed: refreshFeed
+        refreshFeed: refreshFeed,
+        savedArticles: savedArticles
     });
     WinJS.Namespace.define("MyConverters", {
         cssUrl: WinJS.Binding.converter(function (url) {
@@ -395,8 +406,8 @@
         }),
         staticHTML: WinJS.Binding.converter(function (element) {
             //let contentHTML = window.toStaticHTML(element);
-            let contentHTML = processContent(element);
-            return window.toStaticHTML(contentHTML);
+            let processedContent = processContent(element);
+            return window.toStaticHTML(processedContent);
         })
         //ellipsizeTextBox: ellipsizeTextBox
     });

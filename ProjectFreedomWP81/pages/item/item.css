@@ -21,7 +21,7 @@
 
     .itempage.fragment header[role=banner] h2.titlearea .pagetitle {
         line-height: 1.2;
-        font-weight: bold;
+        /*font-weight: bold;*/
     }
 
     .fragment header[role=banner] .titlearea .pagetitle {
@@ -30,18 +30,20 @@
 
     .fragment header[role=banner] a {
         text-decoration: none;
+        color: gray;
+        font-size: 15pt;
     }
 
-    .itempage.fragment header[role=banner] h3.author {
+    /*.itempage.fragment header[role=banner] h3.author {
         color: gray;
-    }
+    }*/
 
     .fragment header[role=banner] .date {
         padding-top: 10px;
         font-size: 12pt;
     }
 
-    .itempage.fragment section[role=main] .content>.articleContent {
+    .itempage.fragment section.content[role=main] .articleContent {
         font-size: 16pt;
         margin-bottom:10px;
 
