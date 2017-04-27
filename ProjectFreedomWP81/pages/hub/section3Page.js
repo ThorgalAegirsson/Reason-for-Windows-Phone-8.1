@@ -9,7 +9,7 @@
             options = options || {};
             WinJS.Utilities.startLog('pageControlInside');
 
-            let feed = Reason.allFeeds.Articles; // attach the appropriate feed
+            let feed = Reason.allFeeds.Blog; // attach the appropriate feed
             let listView = element.querySelector(".itemslist").winControl;
 
             //if (feed.previous) {
@@ -34,7 +34,7 @@
             //listView.oniteminvoked = options.oniteminvoked;
             listView.addEventListener('iteminvoked', function (args) {
                 let item = feed.current[args.detail.itemIndex];
-                WinJS.Navigation.navigate("/pages/item/item.html", { item: item });
+                WinJS.Navigation.navigate("/pages/item/item.html", { item: item, type: 'Blog' });
             });
 
         }

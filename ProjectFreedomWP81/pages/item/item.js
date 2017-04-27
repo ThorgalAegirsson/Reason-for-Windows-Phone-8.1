@@ -8,7 +8,8 @@
             // TODO: Initialize the page here.
             let item = options.item; //defined in section3page.js
             WinJS.Namespace.define('Reason', {
-                currentItem: options.item
+                currentItem: options.item,
+                type: options.type
             });
             console.log('item: ');
             console.log(item);

@@ -21,6 +21,9 @@
     }
     function saveArticle(e) {
         let item = Reason.currentItem;
+        let type = Reason.type;
+        console.log('Reason.savedArticles before adding:');
+        console.log(Reason.savedArticles);
         let savedArticles = Reason.savedArticles.map(function(savedItem){
             return savedItem.origLink;
         });
@@ -31,9 +34,38 @@
         } else {
             Reason.savedArticles[index] = item;
         }
-        WinJS.Application.
-        console.log('saved articles:');
+        console.log('Reason.savedArticles:');
         console.log(Reason.savedArticles);
+        let appData = Windows.Storage.ApplicationData.current;
+        appData.localFolder.createFileAsync('savedArticles.txt', Windows.Storage.CreationCollisionOption.replaceExisting)
+            .then(function (file) {
+                return Windows.Storage.FileIO.writeTextAsync(file, JSON.stringify(Reason.savedArticles));
+            })
+            .then(function (contents) {
+                console.log('updated savedArticles:');
+                console.log(contents);
+            });
+        //Helpers.savedArticlesContainer.values['savedArticle'] = JSON.stringify(Reason.savedArticles);
+        //console.log('saved articles:');
+        //console.log(Reason.savedArticles);
+    }
+    function removeArticle(e) {
+        let item = Reason.currentItem;
+        let savedArticles = Reason.savedArticles.map(function (savedItem) {
+            return savedItem.origLink;
+        });
+        let index = savedArticles.indexOf(item.origLink);
+        if (index === -1) return;
+        Reason.savedArticles.splice(index, 1);
+        let appData = Windows.Storage.ApplicationData.current;
+        appData.localFolder.createFileAsync('savedArticles.txt', Windows.Storage.CreationCollisionOption.replaceExisting)
+            .then(function (file) {
+                return Windows.Storage.FileIO.writeTextAsync(file, JSON.stringify(Reason.savedArticles));
+            })
+            .then(function (contents) {
+                console.log('updated savedArticles:');
+                console.log(contents);
+            });
     }
 
 
@@ -42,6 +74,7 @@
         openLink: openLink,
         showShareUI: showShareUI,
         shareLink: shareLink,
-        saveArticle: saveArticle
+        saveArticle: saveArticle,
+        removeArticle: removeArticle
     });
 })();

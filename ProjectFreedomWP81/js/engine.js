@@ -2,11 +2,44 @@
     'use strict';
     WinJS.Utilities.startLog('retrieveFeed pageControl');
     console.clear();
-
+    
+    
+    let appData = Windows.Storage.ApplicationData.current;
+    console.log('maximum roaming:');
+    console.log(appData.roamingStorageQuota);
+    
+    
     let complete = false;
 
-    //let feedArr = [];
+    //Saved articles into local storage
+    //it is saved into a file because the localstorage values can't be longer than 8kB
     let savedArticles = [];
+    appData.localFolder.getFileAsync('savedArticles.txt')
+        .then(function (file) {
+            return Windows.Storage.FileIO.readTextAsync(file);
+            console.log('savedArticles open');
+        }, function error(file) {
+            //appData.localFolder.createFileAsync('savedArticles.txt');
+            console.log('savedArticles created');
+            })
+        .then(function (contents) {
+            if (contents) savedArticles = JSON.parse(contents);
+            WinJS.Namespace.define('Reason', {
+                savedArticles: savedArticles
+            });
+            console.log('savedArticles:');
+            console.log(savedArticles);
+        });
+
+    
+    //let savedArticlesContainer = appData.localSettings.createContainer('savedArticles', Windows.Storage.ApplicationDataCreateDisposition.always);
+    //if (savedArticlesContainer.values.hasKey('savedArticles')) savedArticles = JSON.parse(savedArticlesContainer.values['savedArticles']);
+    //console.log('savedArticles in roaming: ');
+    //console.log(savedArticles);
+
+
+    //END OF LOCAL STORAGE
+
     let currentFeed = null;
     let mediaFeed = false;
     let currentItemIndex = 0;
@@ -392,8 +425,9 @@
         //currentFeed: 
         allFeeds: ReasonFeed,
         refreshFeed: refreshFeed,
-        savedArticles: savedArticles
     });
+    console.log('Reason.savedArticles after namespace assigning');
+    console.log(Reason.savedArticles);
     WinJS.Namespace.define("MyConverters", {
         cssUrl: WinJS.Binding.converter(function (url) {
             return "url('" + url + "')";
@@ -411,4 +445,5 @@
         })
         //ellipsizeTextBox: ellipsizeTextBox
     });
+    
 })();
