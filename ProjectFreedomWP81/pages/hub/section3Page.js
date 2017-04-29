@@ -10,6 +10,9 @@
             WinJS.Utilities.startLog('pageControlInside');
             let feed = Reason.allFeeds.Blog; // attach the appropriate feed
             let listView = element.querySelector(".itemslist").winControl;
+            listView.loadingBehavior = 'randomaccess';
+            
+
             //reload previous from saved file
             let appData = Windows.Storage.ApplicationData.current;
             let fileName = 'previous' + feed.name + '.txt';
@@ -44,7 +47,22 @@
                 Reason.refreshFeed(feed, element);
                 //feed.firstStart = false; //moved to refreshFeed
             }
-
+            //load the scroll position for listview
+            console.log('listview loaded');
+            Helpers.loadLVPosition(listView);
+            listView.onloadingstatechanged = function () {
+                if (listView.loadingState === 'complete') {
+                    
+                }
+            }
+            
+            //if (!sessionState.itemList) {
+            //    sessionState.itemList = {};
+            //} else if (sessionState.itemList.scrollPosition) {
+            //    WinJS.Promise.timeout().then(function () {
+            //        listView.ensureVisible(scrollPosition) = sessionState.itemList.scrollPosition;
+            //    });
+            //}
             document.querySelector('#cmdRefresh').addEventListener('click', function () {
                 Reason.refreshFeed(feed, element);
             }.bind(this));
@@ -52,9 +70,11 @@
             listView.layout = options.layout;
             //listView.oniteminvoked = options.oniteminvoked;
             listView.addEventListener('iteminvoked', function (args) {
+                
                 let feedSrc = feed.current || feed.previous;
                 let item = feedSrc[args.detail.itemIndex];
                 WinJS.Navigation.navigate("/pages/item/item.html", { item: item, type: 'Blog' });
+                Helpers.saveLVPosition(listView);
             });
 
         }

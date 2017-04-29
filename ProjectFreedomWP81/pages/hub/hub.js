@@ -18,6 +18,7 @@
         // populates the page elements with the app's data.
         ready: function (element, options) {
             var hub = element.querySelector(".hub").winControl;
+            if (session.lastSectionIndex) hub.selectedIndex = session.lastSectionIndex;
             hub.onheaderinvoked = function (args) {
                 args.detail.section.onheaderinvoked(args);
             };
@@ -29,9 +30,10 @@
             }
 
             // TODO: Initialize the page here.
-            //document.querySelector('#articleFav').style.display = 'none';
-            //document.querySelector('#articleBrowser').style.display = 'none';
-            //document.querySelector('#articleShare').style.display = 'none';
+            
+            if (!hub.onselectionchanged) hub.onselectionchanged = function (args) {
+                session.lastSectionIndex = args.detail.index;
+            }
             let appBar = document.querySelector('#appbar').winControl;
             if (appBar) appBar.showOnlyCommands(['cmdRefresh', 'cmdSettings']);
         },

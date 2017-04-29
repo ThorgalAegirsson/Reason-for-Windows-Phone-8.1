@@ -72,6 +72,21 @@
             });
     }
 
+    function saveLVPosition(lv) {
+        WinJS.Application.sessionState.scrollPosition = lv.scrollPosition;
+        console.log('scrollPosition saved:');
+        console.log(WinJS.Application.sessionState.scrollPosition);
+    }
+
+    function loadLVPosition(lv) {
+        setImmediate(function () {
+            let scrollPosition = WinJS.Application.sessionState.scrollPosition;
+            if (scrollPosition) lv.scrollPosition = scrollPosition;
+                //lv.ensureVisible(scrollPosition);
+            console.log('scrollPosition restored:');
+            console.log(scrollPosition);
+        });
+    }
 
     //export methods
     WinJS.Namespace.define('Helpers', {
@@ -80,6 +95,8 @@
         shareLink: shareLink,
         saveArticle: saveArticle,
         removeArticle: removeArticle,
-        savePrevious: savePrevious
+        savePrevious: savePrevious,
+        saveLVPosition: saveLVPosition,
+        loadLVPosition: loadLVPosition
     });
 })();
