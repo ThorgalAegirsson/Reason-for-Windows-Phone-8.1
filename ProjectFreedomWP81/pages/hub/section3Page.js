@@ -8,22 +8,41 @@
         ready: function (element, options) {
             options = options || {};
             WinJS.Utilities.startLog('pageControlInside');
-
             let feed = Reason.allFeeds.Blog; // attach the appropriate feed
             let listView = element.querySelector(".itemslist").winControl;
+            //reload previous from saved file
+            let appData = Windows.Storage.ApplicationData.current;
+            let fileName = 'previous' + feed.name + '.txt';
+            console.log('reading from previous:');
+            console.log(fileName);
+            appData.localFolder.getFileAsync(fileName)
+                .then(function (file) {
+                    return Windows.Storage.FileIO.readTextAsync(file);
+                }, function error(file) {
+                    console.log('previous file created');
+                })
+                .then(function (contents) {
+                    if (contents) feed.previous = JSON.parse(contents);
+                    console.log('previous articles:');
+                    console.log(feed.previous);
+                    //if (feed.previous) {
+                    WinJS.log && WinJS.log('previous loaded', 'pageControlInside', 'INFO');
+                    console.log('previous loaded console');
+                    let list = new WinJS.Binding.List(feed.previous);
+                    listView.itemDataSource = list.dataSource;
+                    //}
+                });
+            //end reload previous
+            
+            
 
-            //if (feed.previous) {
-                WinJS.log && WinJS.log('previous loaded', 'pageControlInside', 'INFO');
-                console.log('previous loaded console');
-                let list = new WinJS.Binding.List(feed.previous);
-                listView.itemDataSource = list.dataSource;
-            //}
+            
             //was the app started? if so refresh content
             if (feed.firstStart || !feed.previous) {
                 WinJS.log && WinJS.log('initial load', 'pageControlInside', 'INFO');
                 console.log('initial load console');
                 Reason.refreshFeed(feed, element);
-                feed.firstStart = false;
+                //feed.firstStart = false; //moved to refreshFeed
             }
 
             document.querySelector('#cmdRefresh').addEventListener('click', function () {
@@ -33,7 +52,8 @@
             listView.layout = options.layout;
             //listView.oniteminvoked = options.oniteminvoked;
             listView.addEventListener('iteminvoked', function (args) {
-                let item = feed.current[args.detail.itemIndex];
+                let feedSrc = feed.current || feed.previous;
+                let item = feedSrc[args.detail.itemIndex];
                 WinJS.Navigation.navigate("/pages/item/item.html", { item: item, type: 'Blog' });
             });
 

@@ -28,10 +28,13 @@
         
     }
 
-    .fragment header[role=banner] a {
+    .fragment header[role=banner] a, h3.author {
         text-decoration: none;
         color: gray;
         font-size: 15pt;
+    }
+    .fragment header[role=banner] a {
+
     }
 
     /*.itempage.fragment header[role=banner] h3.author {

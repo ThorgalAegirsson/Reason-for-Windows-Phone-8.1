@@ -19,36 +19,24 @@
         request.data.setText('I want to share this article with you: ');
         request.data.setWebLink(new Windows.Foundation.Uri(item.origLink));
     }
+
     function saveArticle(e) {
+        
         let item = Reason.currentItem;
-        let type = Reason.type;
-        console.log('Reason.savedArticles before adding:');
-        console.log(Reason.savedArticles);
+        let type = Reason.type; //not in use, created for roaming purposes
         let savedArticles = Reason.savedArticles.map(function(savedItem){
             return savedItem.origLink;
         });
         let index = savedArticles.indexOf(item.origLink);
-        console.log('saved articles index: ' + index);
         if (index === -1) {
             Reason.savedArticles.push(item);
         } else {
             Reason.savedArticles[index] = item;
         }
-        console.log('Reason.savedArticles:');
-        console.log(Reason.savedArticles);
-        let appData = Windows.Storage.ApplicationData.current;
-        appData.localFolder.createFileAsync('savedArticles.txt', Windows.Storage.CreationCollisionOption.replaceExisting)
-            .then(function (file) {
-                return Windows.Storage.FileIO.writeTextAsync(file, JSON.stringify(Reason.savedArticles));
-            })
-            .then(function (contents) {
-                console.log('updated savedArticles:');
-                console.log(contents);
-            });
-        //Helpers.savedArticlesContainer.values['savedArticle'] = JSON.stringify(Reason.savedArticles);
-        //console.log('saved articles:');
-        //console.log(Reason.savedArticles);
-    }
+        let errMsg = "I couldn't remove your article. Spare me! I beg you!";
+        _updateLocalStorage(Reason.savedArticles, 'savedArticles.txt', errMsg);
+   }
+
     function removeArticle(e) {
         let item = Reason.currentItem;
         let savedArticles = Reason.savedArticles.map(function (savedItem) {
@@ -57,14 +45,30 @@
         let index = savedArticles.indexOf(item.origLink);
         if (index === -1) return;
         Reason.savedArticles.splice(index, 1);
+        let errMsg = "I couldn't remove your article. Spare me! I beg you!";
+        _updateLocalStorage(Reason.savedArticles, 'savedArticles.txt', errMsg);
+    }
+
+    function savePrevious(feed) {
+        console.log('feed while saving');
+        console.log(feed);
+        let fileName = 'previous' + feed.name + '.txt';
+        _updateLocalStorage(feed.previous, fileName);
+
+    }
+
+    function _updateLocalStorage(articleList, fileName, errMsg) {
+        console.log('previous article list');
+        console.log(articleList);
+        console.log(fileName);
         let appData = Windows.Storage.ApplicationData.current;
-        appData.localFolder.createFileAsync('savedArticles.txt', Windows.Storage.CreationCollisionOption.replaceExisting)
+        appData.localFolder.createFileAsync(fileName, Windows.Storage.CreationCollisionOption.replaceExisting)
             .then(function (file) {
-                return Windows.Storage.FileIO.writeTextAsync(file, JSON.stringify(Reason.savedArticles));
-            })
-            .then(function (contents) {
-                console.log('updated savedArticles:');
-                console.log(contents);
+                console.log('writing previous to a file');
+                return Windows.Storage.FileIO.writeTextAsync(file, JSON.stringify(articleList));
+            }, function (error) {
+                let msg = errMsg || 'Something went wrong with localStorage file';
+                new Windows.UI.Popups.MessageDialog(msg);
             });
     }
 
@@ -75,6 +79,7 @@
         showShareUI: showShareUI,
         shareLink: shareLink,
         saveArticle: saveArticle,
-        removeArticle: removeArticle
+        removeArticle: removeArticle,
+        savePrevious: savePrevious
     });
 })();

@@ -29,6 +29,11 @@
             }
 
             // TODO: Initialize the page here.
+            //document.querySelector('#articleFav').style.display = 'none';
+            //document.querySelector('#articleBrowser').style.display = 'none';
+            //document.querySelector('#articleShare').style.display = 'none';
+            let appBar = document.querySelector('#appbar').winControl;
+            if (appBar) appBar.showOnlyCommands(['cmdRefresh', 'cmdSettings']);
         },
 
         section3DataSource: section3Items.dataSource,

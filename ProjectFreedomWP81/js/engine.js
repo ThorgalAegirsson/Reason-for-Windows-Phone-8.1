@@ -46,30 +46,35 @@
     let defaultPic = '/images/reasonlogo.png';
     let ReasonFeed = {
         Blog: {
+            name: 'Blog',
             url: 'http://feeds.feedburner.com/reason/HitandRun?format=xml',
             firstStart: true,
             previous: null,
             current: null
         },
         Articles: {
+            name: 'Articles',
             url: 'http://feeds.feedburner.com/reason/Articles?format=xml',
             firstStart: true,
             previous: null,
             current: null
         },
         TV: {
+            name: 'TV',
             url: 'http://reason.com/itunes/index.xml',
             firstStart: true,
             previous: null,
             current: null
         },
         Podcast: {
+            name: 'Podcast',
             url: 'http://reason.com/podcast/index.xml',
             firstStart: true,
             previous: null,
             current: null
         },
         Org: {
+            name: 'org',
             url: 'http://reason.org/rss/index.xml',
             firstStart: true,
             previous: null,
@@ -129,7 +134,7 @@
             let intervalID = setInterval(function () {
                 //progress(doneFeed.length);
                 if (complete) {
-                    done(feedObject.current);
+                    done(feedObject);
                     clearInterval(intervalID);
                 }
             }, 50);
@@ -147,7 +152,7 @@
         document.querySelector('.feedStatus').textContent = "Couldn't download the articles!!!";
         document.querySelector('.feedStatus').style.display = '';
         window.setTimeout(function () {
-            document.querySelector('.feedStatus').style.display = 'none';
+            if (document.querySelector('.feedStatus')) document.querySelector('.feedStatus').style.display = 'none';
         }, 5000);
         let errorStatus = Windows.Web.Syndication.SyndicationError.getStatus(err.number);
         if (errorStatus === Windows.Web.Syndication.SyndicationErrorStatus.invalidXml) console.log('An invalid XML exception was thrown. Please make sure to use a URI that points to a RSS or Atom feed');
@@ -159,14 +164,17 @@
         WinJS.log && WinJS.log('feed refreshed', 'pageControl', 'INFO');
         Reason.retrieve(feed, listView).done(
             function (feed) {
+                feed.firstStart = false;
                 WinJS.log && WinJS.log('listview' + listView, 'pageControl', 'INFO');
                 WinJS.log && WinJS.log('                                              feed final:', 'pageControl', 'INFO');
                 WinJS.log && WinJS.log(feed, 'pageControl', 'INFO');
-                listView.itemDataSource = new WinJS.Binding.List(feed).dataSource;
+                listView.itemDataSource = new WinJS.Binding.List(feed.current).dataSource;
                 element.querySelector('.feedStatus').style.display = 'none';
+                Helpers.savePrevious(feed);
+                console.log('previous saved');
             },
             function error() {
-                
+                feed.firstStart = true;
                 element.querySelector('.feedStatus').innerHTML = "<p>Something went wrong. Do you have the internet connection? Try again later...</p>"
                 element.querySelector('.feedStatus').style.display = '';
                 let intervalID = window.setTimeout(function () {
@@ -425,6 +433,7 @@
         //currentFeed: 
         allFeeds: ReasonFeed,
         refreshFeed: refreshFeed,
+        currentItem: null
     });
     console.log('Reason.savedArticles after namespace assigning');
     console.log(Reason.savedArticles);
