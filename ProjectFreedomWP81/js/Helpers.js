@@ -16,12 +16,11 @@
         let request = e.request;
         request.data.properties.title = 'Reason: '+ item.title;
         request.data.properties.description = 'Article from Reason app for Windows Phone';
-        request.data.setText('I want to share this article with you: ');
+        request.data.setText("I'd to share this article with you: ");
         request.data.setWebLink(new Windows.Foundation.Uri(item.origLink));
     }
 
     function saveArticle(e) {
-        
         let item = Reason.currentItem;
         let type = Reason.type; //not in use, created for roaming purposes
         let savedArticles = Reason.savedArticles.map(function(savedItem){
@@ -49,18 +48,23 @@
         _updateLocalStorage(Reason.savedArticles, 'savedArticles.txt', errMsg);
     }
 
+    function refreshButtonHandler(e) {
+        //console.log('Event in refreshButtonHandler');
+        //console.log(e);
+        //console.log(e.target.ownerDocument.querySelector('.itemslist'));
+        Reason.refreshFeed(Reason.roamingData.feed, Reason.roamingData.element);
+    }
+
+    function settingsButtonHandler(e) {
+        console.log('settigns clicked');
+    }
+
     function savePrevious(feed) {
-        console.log('feed while saving');
-        console.log(feed);
         let fileName = 'previous' + feed.name + '.txt';
         _updateLocalStorage(feed.previous, fileName);
-
     }
 
     function _updateLocalStorage(articleList, fileName, errMsg) {
-        console.log('previous article list');
-        console.log(articleList);
-        console.log(fileName);
         let appData = Windows.Storage.ApplicationData.current;
         appData.localFolder.createFileAsync(fileName, Windows.Storage.CreationCollisionOption.replaceExisting)
             .then(function (file) {
@@ -74,19 +78,41 @@
 
     function saveLVPosition(lv) {
         WinJS.Application.sessionState.scrollPosition = lv.scrollPosition;
-        console.log('scrollPosition saved:');
-        console.log(WinJS.Application.sessionState.scrollPosition);
+        //console.log('scrollPosition saved:');
+        //console.log(WinJS.Application.sessionState.scrollPosition);
     }
 
     function loadLVPosition(lv) {
         setImmediate(function () {
             let scrollPosition = WinJS.Application.sessionState.scrollPosition;
             if (scrollPosition) lv.scrollPosition = scrollPosition;
-                //lv.ensureVisible(scrollPosition);
-            console.log('scrollPosition restored:');
-            console.log(scrollPosition);
         });
     }
+
+    function readPrevious(feed, listView) {
+        let appData = Windows.Storage.ApplicationData.current;
+        let fileName = 'previous' + feed.name + '.txt';
+        //console.log('reading from previous:');
+        //console.log(fileName);
+        appData.localFolder.getFileAsync(fileName)
+            .then(function (file) {
+                return Windows.Storage.FileIO.readTextAsync(file);
+            }, function error(file) {
+                //console.log('previous file created');
+            })
+            .then(function (contents) {
+                if (contents) feed.previous = JSON.parse(contents);
+                //console.log('previous articles:');
+                //console.log(feed.previous);
+                //if (feed.previous) {
+                WinJS.log && WinJS.log('previous loaded', 'pageControlInside', 'INFO');
+                console.log('previous loaded console');
+                let list = new WinJS.Binding.List(feed.previous);
+                listView.itemDataSource = list.dataSource;
+                //}
+            });
+    }
+    
 
     //export methods
     WinJS.Namespace.define('Helpers', {
@@ -96,7 +122,10 @@
         saveArticle: saveArticle,
         removeArticle: removeArticle,
         savePrevious: savePrevious,
+        readPrevious: readPrevious,
         saveLVPosition: saveLVPosition,
-        loadLVPosition: loadLVPosition
+        loadLVPosition: loadLVPosition,
+        refreshButtonHandler: refreshButtonHandler,
+        settingsButtonHandler: settingsButtonHandler
     });
 })();

@@ -6,7 +6,11 @@
 </head>
 <body>
     <div class="fragment section3page">
+        
         <section aria-label="Main content" role="main">
+            <div class="feedStatus" style="display: none">
+                <progress class="feedLoadingProgress"></progress>
+            </div>
             <div class="itemTemplate" data-win-control="WinJS.Binding.Template">
                 <div class="templatecontainer">
                     <div class="logo" data-win-bind="style.backgroundImage: picture MyConverters.cssUrl">
@@ -16,7 +20,7 @@
                         <div class="titleDiv">
                             <h3 data-win-bind="innerHTML: title"></h3>
                         </div>
-                        
+
                         <h4 data-win-bind="textContent: author MyConverters.authorStringOnly"></h4>
                         <!--<a data-win-bind="href: link"><span data-win-bind="innerText: link"></span></a>-->
                     </div>
@@ -27,9 +31,7 @@
                     </div>-->
                 </div>
             </div>
-            <div class="feedStatus" style="display: none">
-                <progress id="feedLoadingProgress"></progress>
-            </div>
+
             <div class="itemslist win-selectionstylefilled" data-win-control="WinJS.UI.ListView" data-win-options="{
                         selectionMode: 'none',
                         itemTemplate: select('.itemTemplate')

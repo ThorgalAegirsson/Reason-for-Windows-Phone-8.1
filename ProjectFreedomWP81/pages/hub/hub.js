@@ -19,6 +19,9 @@
         ready: function (element, options) {
             var hub = element.querySelector(".hub").winControl;
             if (session.lastSectionIndex) hub.selectedIndex = session.lastSectionIndex;
+            if (!hub.onselectionchanged) hub.onselectionchanged = function (args) {
+                session.lastSectionIndex = args.detail.index;
+            }
             hub.onheaderinvoked = function (args) {
                 args.detail.section.onheaderinvoked(args);
             };
@@ -31,11 +34,10 @@
 
             // TODO: Initialize the page here.
             
-            if (!hub.onselectionchanged) hub.onselectionchanged = function (args) {
-                session.lastSectionIndex = args.detail.index;
-            }
             let appBar = document.querySelector('#appbar').winControl;
             if (appBar) appBar.showOnlyCommands(['cmdRefresh', 'cmdSettings']);
+            document.querySelector('#cmdRefresh').addEventListener('click', Helpers.refreshButtonHandler, false);
+            document.querySelector('#cmdSettings').addEventListener('click', Helpers.settingsButtonHandler, false);
         },
 
         section3DataSource: section3Items.dataSource,

@@ -123,7 +123,6 @@
             }
             WinJS && WinJS.log("Items: " + currentFeed.items.size, 'retrieveFeed retrieveFeedAsync', 'INFO');
             WinJS && WinJS.log("latest feedObject: ", 'retrieveFeed retrieveFeedAsync', 'INFO');
-            //WinJS && WinJS.log(feedArr, 'retrieveFeed retrieveFeedAsync', 'INFO');
             console.log(feedArr);
             feedObject.current = feedArr;
             //lv.itemDataSource = new WinJS.Binding.List(feedObject.current).dataSource;
@@ -149,38 +148,51 @@
     function onError(err) {
         WinJS.log && WinJS.log(err, 'retrieveFeed promise', 'ERROR');
         WinJS.log && WinJS.log("ERROR ERROR ERROR", 'retrieveFeed promise', 'ERROR');
-        document.querySelector('.feedStatus').textContent = "Couldn't download the articles!!!";
-        document.querySelector('.feedStatus').style.display = '';
-        window.setTimeout(function () {
-            if (document.querySelector('.feedStatus')) document.querySelector('.feedStatus').style.display = 'none';
-        }, 5000);
+        Windows.UI.Popups.MessageDialog("I couldn't download new articles. Are you connected to the Internet?").showAsync();
+        document.querySelector('.feedStatus').style.display = 'none';
+        //Helpers.readPrevious(feed, lv);
+        //document.querySelector('.feedStatus').textContent = "Couldn't download the articles!!!";
+        //document.querySelector('.feedStatus').style.display = '';
+        //window.setTimeout(function () {
+        //    if (document.querySelector('.feedStatus')) document.querySelector('.feedStatus').style.display = 'none';
+        //}, 5000);
         let errorStatus = Windows.Web.Syndication.SyndicationError.getStatus(err.number);
         if (errorStatus === Windows.Web.Syndication.SyndicationErrorStatus.invalidXml) console.log('An invalid XML exception was thrown. Please make sure to use a URI that points to a RSS or Atom feed');
     }
 
     function refreshFeed(feed, element) {
-        element.querySelector('.feedStatus').style.display = '';
-        let listView = element.querySelector(".itemslist").winControl;
+        console.log('element in refreshFeed:');
+        console.log(element);
+        //element.querySelector('.feedStatus').style.display = '';
+        let lv = element.querySelector('.itemslist');
+        let listView = lv.winControl;
+        
         WinJS.log && WinJS.log('feed refreshed', 'pageControl', 'INFO');
         Reason.retrieve(feed, listView).done(
             function (feed) {
-                feed.firstStart = false;
+                
                 WinJS.log && WinJS.log('listview' + listView, 'pageControl', 'INFO');
                 WinJS.log && WinJS.log('                                              feed final:', 'pageControl', 'INFO');
                 WinJS.log && WinJS.log(feed, 'pageControl', 'INFO');
                 listView.itemDataSource = new WinJS.Binding.List(feed.current).dataSource;
-                element.querySelector('.feedStatus').style.display = 'none';
+                feed.firstStart = false;
                 Helpers.savePrevious(feed);
                 console.log('previous saved');
+                document.querySelector('.feedStatus').style.display = 'none';
+                lv.style.display = '';
             },
             function error() {
+                document.querySelector('.feedStatus').style.display = 'none';
                 feed.firstStart = true;
-                element.querySelector('.feedStatus').innerHTML = "<p>Something went wrong. Do you have the internet connection? Try again later...</p>"
-                element.querySelector('.feedStatus').style.display = '';
-                let intervalID = window.setTimeout(function () {
-                    element.querySelector('.feedStatus').style.display = 'none';
-                }, 5000);
-                WinJS.log && WinJS.log("                                             ERROR ERROR ERROR", 'pageControl', 'INFO');
+                Windows.UI.Popups.MessageDialog("I couln't download the articles. Check your internet connection").showAsync();
+                listView.itemDataSource = new WinJS.Binding.List(feed.previous).dataSource;
+                lv.style.display = '';
+                //element.querySelector('.feedStatus').innerHTML = "<p>Something went wrong. Do you have the internet connection? Try again later...</p>"
+                //element.querySelector('.feedStatus').style.display = '';
+                //let intervalID = window.setTimeout(function () {
+                //    element.querySelector('.feedStatus').style.display = 'none';
+                //}, 5000);
+                WinJS.log && WinJS.log("ERROR ERROR ERROR refresfFeed failed", 'pageControl', 'INFO');
             },
             function progress(feedLength) {
                 WinJS.log && WinJS.log('                                               feed length: ' + feedLength, 'pageControl', 'INFO');
@@ -256,24 +268,10 @@
     //    }
     //}
 
-    //function authorString(authorsArray) {
-    //    let authors = document.createElement('span');
-    //    authorsArray.forEach(function (author) {
-    //        let link = document.createElement('a');
-    //        link.href = author.email;
-    //        let name = document.createElement('span');
-    //        name.innerText = author.name;
-    //        link.appendChild(name);
-    //        authors.appendChild(link);
-    //    });
-    //    return authors;
-    //}
-    
     function authorString(authorsArray) {
         let authors = [];
         authorsArray.forEach(function (author) {
             let authorEl = '<a href="' + author.email + '">' + author.name + '</a>';
-            //let authorEl = author.name;
             authors.push(authorEl);
         });
         return '<span>'+authors.join(', ')+'</span>';
@@ -433,10 +431,14 @@
         //currentFeed: 
         allFeeds: ReasonFeed,
         refreshFeed: refreshFeed,
-        currentItem: null
+        currentItem: null,
+        roamingData: {
+            feed: null,
+            element: null
+        }
     });
-    console.log('Reason.savedArticles after namespace assigning');
-    console.log(Reason.savedArticles);
+    //console.log('Reason.savedArticles after namespace assigning');
+    //console.log(Reason.savedArticles);
     WinJS.Namespace.define("MyConverters", {
         cssUrl: WinJS.Binding.converter(function (url) {
             return "url('" + url + "')";

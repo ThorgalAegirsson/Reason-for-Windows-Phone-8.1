@@ -250,12 +250,20 @@
     overflow: hidden;
 }
 
-.section3page .feedStatus {
-    margin-left: auto;
+.section3page .feedStatus .feedLoadingProgress {
+    /*margin-left: 25vw;
     margin-right: auto;
+    width: 50vw;*/
+    /*width: inherit;*/
+    margin-top: 0;
+    margin-bottom: 0;
+}
 
+.fragment .section3page .feedStatus {
+    height: 20px;
+    margin-top: -10px;
 }
 
 .hubpage .hub .section3 .itemslist {
-    height: 75vh;
+    /*height: 75vh;*/
 }

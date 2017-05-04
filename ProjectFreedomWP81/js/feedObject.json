@@ -34,7 +34,10 @@ WinJS.Namespace.define('Reason', {
   refreshFeed: refreshFeed,
   currentItem: null,
   savedArticles,
-
+  "roamingData": {
+    "feed": null,
+    "element": null
+  }
 });
 
 
