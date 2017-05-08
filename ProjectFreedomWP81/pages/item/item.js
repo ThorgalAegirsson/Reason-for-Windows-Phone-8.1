@@ -15,7 +15,14 @@
             //console.log('item: ');
             //console.log(item);
             if (sessionState.history) item = sessionState.history.current.state.item;
-            WinJS.Binding.processAll(null, item);
+            //console.log('item from history: ');
+            //console.log(sessionState);
+            //console.log(item);
+            if (sessionState.reasonSavedArticles) WinJS.Namespace.define('Reason', {
+                savedArticles: sessionState.reasonSavedArticles
+            });
+            //if (sessionState.reason) console.log(sessionState.reason);
+            WinJS.Binding.processAll(element, item);
 
             //sharing contract init
             let dataTransferManager = Windows.ApplicationModel.DataTransfer.DataTransferManager.getForCurrentView();

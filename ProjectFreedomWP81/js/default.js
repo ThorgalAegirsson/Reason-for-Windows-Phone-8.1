@@ -65,7 +65,7 @@
         // suspended, call args.setPromise().
         
         app.sessionState.history = nav.history;
-        //app.sessionState.reasonAllFeeds = Reason.allFeeds;
+        app.sessionState.reasonSavedArticles = Reason.savedArticles;
         //app.sessionState.reasonCurrentItem = Reason.currentItem;
         //app.sessionState.reasonRoamingData = Reason.roamingData;
         console.log('app sessionstate on checkpoint: ');

@@ -163,14 +163,14 @@
     function refreshFeed(feed, element) {
         console.log('element in refreshFeed:');
         console.log(element);
-        //element.querySelector('.feedStatus').style.display = '';
+        element.querySelector('.feedStatus').style.display = '';
         let lv = element.querySelector('.itemslist');
         let listView = lv.winControl;
         
         WinJS.log && WinJS.log('feed refreshed', 'pageControl', 'INFO');
         Reason.retrieve(feed, listView).done(
             function (feed) {
-                
+                document.querySelector('.feedStatus').style.display = 'none';
                 WinJS.log && WinJS.log('listview' + listView, 'pageControl', 'INFO');
                 WinJS.log && WinJS.log('                                              feed final:', 'pageControl', 'INFO');
                 WinJS.log && WinJS.log(feed, 'pageControl', 'INFO');
@@ -241,48 +241,9 @@
         return month +' '+ day + ', ' + year;
     }
 
-    function parseContent(content) {
+    function _parseContent(content) {
         let parser = new DOMParser();
         return parser.parseFromString(content, 'text/html');
-    }
-
-    function processContent(contentHTML) {
-        const content = parseContent(contentHTML);
-        const imgs = content.querySelectorAll('img');
-        //debugger;
-        [].forEach.call(imgs, function (img) {
-            img.style.maxWidth = '100%';
-            img.style.height = 'auto';
-        });
-        let serializer = new XMLSerializer();
-        let contentString = serializer.serializeToString(content);
-        console.log(contentString);
-        return contentString;
-    }
-    //function ellipsizeTextBox(txt) { //not in use
-    //    let el = txt.parentElement;
-    //    let wordArray = el.innerHTML.split(' ');
-    //    while (el.scrollHeight > el.offsetHeight) {
-    //        wordArray.pop();
-    //        el.innerHTML = wordArray.join(' ') + '...';
-    //    }
-    //}
-
-    function authorString(authorsArray) {
-        let authors = [];
-        authorsArray.forEach(function (author) {
-            let authorEl = '<a href="' + author.email + '">' + author.name + '</a>';
-            authors.push(authorEl);
-        });
-        return '<span>'+authors.join(', ')+'</span>';
-    }
-
-    function authorStringOnly(authorsArray) {
-        let authors = [];
-        authorsArray.forEach(function (author) {
-            authors.push(author.name);
-        });
-        return authors.join(', ');
     }
 
     function createFeedObj(currentItemIndex, feedArr) {
@@ -378,8 +339,8 @@
             //    feedObject.origLink = item.elementExtensions[i].nodeValue;
             //}
         }
-        feedObject.authors = authorStringOnly(feedObject.author);
-        feedObject.authorsWithLinks = authorString(feedObject.author);
+        //feedObject.authors = authorStringOnly(feedObject.author);
+        //feedObject.authorsWithLinks = authorString(feedObject.author);
         WinJS && WinJS.log('authors: ', 'createFeed', 'INFO');
         WinJS && WinJS.log(feedObject.authors, 'createFeed', 'INFO');
         WinJS && WinJS.log('original link: ' + feedObject.origLink, 'createFeed', 'INFO');
@@ -387,7 +348,7 @@
         let picSrc = '';
         let vidSrc = '';
         
-        let contentHTML = parseContent(feedObject.content);
+        let contentHTML = _parseContent(feedObject.content);
         let firstPic = contentHTML.getElementsByTagName('div')[0].getElementsByTagName('img')[0];
         if (firstPic) {
             feedObject.picture = firstPic.src;
@@ -439,22 +400,6 @@
     });
     //console.log('Reason.savedArticles after namespace assigning');
     //console.log(Reason.savedArticles);
-    WinJS.Namespace.define("MyConverters", {
-        cssUrl: WinJS.Binding.converter(function (url) {
-            return "url('" + url + "')";
-        }),
-        authorString: WinJS.Binding.converter(function (authorlist) {
-            return authorString(authorlist);
-        }),
-        authorStringOnly: WinJS.Binding.converter(function (authorlist) {
-            return authorStringOnly(authorlist);
-        }),
-        staticHTML: WinJS.Binding.converter(function (element) {
-            //let contentHTML = window.toStaticHTML(element);
-            let processedContent = processContent(element);
-            return window.toStaticHTML(processedContent);
-        })
-        //ellipsizeTextBox: ellipsizeTextBox
-    });
+
     
 })();
