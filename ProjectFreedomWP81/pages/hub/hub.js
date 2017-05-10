@@ -4,6 +4,7 @@
     var nav = WinJS.Navigation;
     var session = WinJS.Application.sessionState;
     var util = WinJS.Utilities;
+    let netInfo = Windows.Networking.Connectivity.NetworkInformation;
 
     // Get the groups used by the data-bound sections of the Hub.
     var section3Group = Data.resolveGroupReference("group4");
@@ -32,6 +33,7 @@
                 }
             }
 
+
             // TODO: Initialize the page here.
             
             let appBar = document.querySelector('#appbar').winControl;
@@ -40,13 +42,13 @@
             document.querySelector('#cmdSettings').addEventListener('click', Helpers.settingsButtonHandler, false);
         },
 
-        section3DataSource: section3Items.dataSource,
+        //section3DataSource: section3Items.dataSource,
 
-        section3ItemNavigate: util.markSupportedForProcessing(function (args) {
-            let item = Reason.currentFeed[args.detail.itemIndex];
-            //var item = Data.getItemReference(section3Items.getAt(args.detail.itemIndex));
-            nav.navigate("/pages/item/item.html", { item: item });
-        }),
+        //sectionItemNavigate: util.markSupportedForProcessing(function (args) {
+        //    let item = Reason.currentFeed[args.detail.itemIndex];
+        //    //var item = Data.getItemReference(section3Items.getAt(args.detail.itemIndex));
+        //    nav.navigate("/pages/item/item.html", { item: item });
+        //}),
 
         unload: function () {
             // TODO: Respond to navigations away from this page.

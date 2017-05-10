@@ -1,12 +1,12 @@
 ﻿(function () {
     'use strict';
     
-    //helpers for appbar
     function openLink() {
         let item = Reason.currentItem;
         let uri = new Windows.Foundation.Uri(item.origLink);
         Windows.System.Launcher.launchUriAsync(uri).done();
     }
+
     function showShareUI() {
         Windows.ApplicationModel.DataTransfer.DataTransferManager.showShareUI();
     }
@@ -32,7 +32,7 @@
         } else {
             Reason.savedArticles[index] = item;
         }
-        let errMsg = "I couldn't remove your article. Spare me! I beg you!";
+        let errMsg = "I couldn't save your article. Spare me! I beg you!";
         _updateLocalStorage(Reason.savedArticles, 'savedArticles.txt', errMsg);
    }
 
@@ -52,7 +52,7 @@
         //console.log('Event in refreshButtonHandler');
         //console.log(e);
         //console.log(e.target.ownerDocument.querySelector('.itemslist'));
-        Reason.refreshFeed(Reason.roamingData.feed, Reason.roamingData.element);
+        Reason.refreshFeed(Reason.currentData.feed, Reason.currentData.element);
     }
 
     function settingsButtonHandler(e) {
@@ -68,7 +68,7 @@
         let appData = Windows.Storage.ApplicationData.current;
         appData.localFolder.createFileAsync(fileName, Windows.Storage.CreationCollisionOption.replaceExisting)
             .then(function (file) {
-                console.log('writing previous to a file');
+                console.log('writing to a file: ' + fileName);
                 return Windows.Storage.FileIO.writeTextAsync(file, JSON.stringify(articleList));
             }, function (error) {
                 let msg = errMsg || 'Something went wrong with localStorage file';
@@ -112,6 +112,60 @@
                 //}
             });
     }
+
+    function testConnection() { // !!! NOT IN USE - UNRELIABLE !!!
+        let networkInfo = Windows.Networking.Connectivity.NetworkInformation;
+        
+        try {
+            let internetProfile = networkInfo.getInternetConnectionProfile();
+            console.log('Connection info: ');
+            console.log(internetProfile);
+            console.log(_getConnectionProfileInfo(internetProfile));
+        } catch (e) {
+            console.log('Connection error: ');
+            console.log(e);
+        }
+    }
+
+    function _getConnectionProfileInfo(connectionProfile) { // NOT IN USE
+        let networkConnectivityInfo = Windows.Networking.Connectivity.NetworkConnectivityLevel;
+        if (connectionProfile == null) return 'null\n\r';
+        //console.log('connectionProfile:');
+        //console.log(connectionProfile);
+        //console.log('connectivityLevel:');
+        //console.log(connectionProfile.getNetworkConnectivityLevel());
+        let str = 'INFO: ';
+        //try {
+        switch (connectionProfile.getNetworkConnectivityLevel()) {
+            case networkConnectivityInfo.none:
+                str += "Connectivity Level: None\n\r";
+                break;
+            case networkConnectivityInfo.localAccess:
+                str += "Connectivity Level: Local Access\n\r";
+                break;
+
+            case networkConnectivityInfo.constrainedInternetAccess:
+                str += "Connectivity Level: Constrained Internet Access\n\r";
+                break;
+            case networkConnectivityInfo.internetAccess:
+                console.log('connectionProfile:');
+                console.log(connectionProfile);
+                console.log('connectivity level:');
+                console.log(connectionProfile.getNetworkConnectivityLevel());
+                str += "Connectivity Level: Internet Access\n\r";
+                break;
+        }
+        //} catch (e) {
+        //    console.log('Connectivity exception caught:');
+        //    console.log(e);
+        //}
+        return str;
+    }
+
+    function testOnline() { // NOT IN USE - I WAS USING IT FOR TESTING
+        console.log('navigator test');
+        console.log(navigator.onLine);
+    }
     
 
     //export methods
@@ -126,6 +180,8 @@
         saveLVPosition: saveLVPosition,
         loadLVPosition: loadLVPosition,
         refreshButtonHandler: refreshButtonHandler,
-        settingsButtonHandler: settingsButtonHandler
+        settingsButtonHandler: settingsButtonHandler,
+        testConnection: testConnection,
+        testOnline: testOnline
     });
 })();

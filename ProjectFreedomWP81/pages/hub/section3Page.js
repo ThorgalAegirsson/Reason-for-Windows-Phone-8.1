@@ -13,8 +13,8 @@
             //console.log(element);
             let feed = Reason.allFeeds.Blog; // attach the appropriate feed
             let lv = element.querySelector('.itemslist');
-            lv.style.display = 'none';
-            WinJS.Namespace.define('Reason.roamingData', {
+            //lv.style.display = 'none';
+            WinJS.Namespace.define('Reason.currentData', {
                 feed: feed,
                 element: element
             });
@@ -27,8 +27,6 @@
                 WinJS.log && WinJS.log('initial load', 'pageControlInside', 'INFO');
                 Reason.refreshFeed(feed, element);
                 //feed.firstStart = false; //moved to refreshFeed
-            } else {
-                lv.style.display = '';
             }
 
             //load the scroll position for listview
@@ -50,7 +48,7 @@
         },
 
         unload: function () {
-            WinJS.Namespace.define('Reason.roamingData', {
+            WinJS.Namespace.define('Reason.currentData', {
                 feed: null,
                 element: null
             });

@@ -161,6 +161,7 @@
     }
 
     function refreshFeed(feed, element) {
+        //Helpers.testConnection();
         console.log('element in refreshFeed:');
         console.log(element);
         element.querySelector('.feedStatus').style.display = '';
@@ -174,7 +175,16 @@
                 WinJS.log && WinJS.log('listview' + listView, 'pageControl', 'INFO');
                 WinJS.log && WinJS.log('                                              feed final:', 'pageControl', 'INFO');
                 WinJS.log && WinJS.log(feed, 'pageControl', 'INFO');
-                listView.itemDataSource = new WinJS.Binding.List(feed.current).dataSource;
+                try {
+                    // THIS HAPPENS ONLY SOMETIMES ALTHOUGH THE SITUATION IS EXACTLY THE SAME:
+                    //When connection lost and then reconnected, user navigates to an item and back to the listview an error is thrown in UI.JS - why!?!
+                    //Possibly I could return a promise with the feed and populate listview in section page itself, maybe that would help... If not - debug steps in ui.js
+                    listView.itemDataSource = new WinJS.Binding.List(feed.current).dataSource;
+                } catch (e) {
+                    console.log('ERROR:');
+                    console.log(e);
+                }
+                
                 feed.firstStart = false;
                 Helpers.savePrevious(feed);
                 console.log('previous saved');
@@ -183,7 +193,7 @@
             },
             function error() {
                 document.querySelector('.feedStatus').style.display = 'none';
-                feed.firstStart = true;
+                //feed.firstStart = true;
                 Windows.UI.Popups.MessageDialog("I couln't download the articles. Check your internet connection").showAsync();
                 listView.itemDataSource = new WinJS.Binding.List(feed.previous).dataSource;
                 lv.style.display = '';
@@ -200,7 +210,7 @@
         );
     }
 
-    function videoToPicture(video) { // currently not in use - see problem in trello
+    function videoToPicture(video) { // currently not in use - see problems in trello
         
         let videoElement = document.createElement('video');
         videoElement.src = video;
@@ -393,7 +403,7 @@
         allFeeds: ReasonFeed,
         refreshFeed: refreshFeed,
         currentItem: null,
-        roamingData: {
+        currentData: {
             feed: null,
             element: null
         }
