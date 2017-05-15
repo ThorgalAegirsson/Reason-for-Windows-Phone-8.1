@@ -31,18 +31,25 @@
             <div class="hub" data-win-control="WinJS.UI.Pivot">
 
                 <div class="section1 section" data-win-control="WinJS.UI.PivotItem" data-win-options="{ isHeaderStatic: true, header: 'Blog' }">
-                    <div class="sectioncontrol" id="section1contenthost" data-win-control="HubApps_SectionControls.Section1Control"></div>
+                    <div class="lvcontenthost sectioncontrol" id="section1contenthost" data-win-control="HubApps_SectionControls.Section1Control"
+                         data-win-options="{
+                             layout: {type: WinJS.UI.ListLayout},
+                         }"></div>
                 </div>
 
                 <div class="section2 section" data-win-control="WinJS.UI.PivotItem" data-win-options="{ isHeaderStatic: true, header: 'Articles' }">
-                    <div class="added pivot-item-viewport" >
+                    <!--<div class="added pivot-item-viewport" >
                         <div class="added pivot-item-surface" >
                             <div class="sectioncontrol" id="section2contenthost" data-win-control="HubApps_SectionControls.Section2Control"></div>
                         </div> 
-                    </div> 
+                    </div>--> 
+                    <div class="lvcontenthost sectioncontrol" id="section2contenthost" data-win-control="HubApps_SectionControls.Section2Control"
+                         data-win-options="{
+                             layout: {type: WinJS.UI.ListLayout},
+                         }"></div>
                 </div>
 
-                <div class="section3 section" data-win-control="WinJS.UI.PivotItem" data-win-options="{ isHeaderStatic: true, header: 'Saved'}">
+                <div class="section3 section" data-win-control="WinJS.UI.PivotItem" data-win-options="{ isHeaderStatic: true, header: 'ReasonTV'}">
                     <div class="lvcontenthost sectioncontrol" id="section3contenthost" data-win-control="HubApps_SectionControls.Section3Control"
                          data-win-options="{
                              layout: {type: WinJS.UI.ListLayout},
@@ -58,8 +65,29 @@
                          }"></div>
                 </div>-->
 
-                <div class="section4 section" data-win-control="WinJS.UI.PivotItem" data-win-options="{ isHeaderStatic: true, header: 'ReasonTV' }" >
-                    <div class="sectioncontrol" id="section4contenthost" data-win-control="HubApps_SectionControls.Section4Control"></div>
+                <div class="section4 section" data-win-control="WinJS.UI.PivotItem" data-win-options="{ isHeaderStatic: true, header: 'Podcast' }" >
+                    <div class="lvcontenthost sectioncontrol" id="section4contenthost" data-win-control="HubApps_SectionControls.Section4Control"
+                         data-win-options="{
+                             layout: {type: WinJS.UI.ListLayout},
+                         }"></div>
+                </div>
+
+                <div class="section5 section" data-win-control="WinJS.UI.PivotItem" data-win-options="{ isHeaderStatic: true, header: 'Reason.Org'}">
+                    <div class="lvcontenthost sectioncontrol" id="section5contenthost" data-win-control="HubApps_SectionControls.Section5Control"
+                         data-win-options="{
+                             layout: {type: WinJS.UI.ListLayout},
+                         }"></div>
+                </div>
+
+                <div class="section6 section" data-win-control="WinJS.UI.PivotItem" data-win-options="{ isHeaderStatic: true, header: 'Saved'}">
+                    <div class="lvcontenthost sectioncontrol" id="section6contenthost" data-win-control="HubApps_SectionControls.Section6Control"
+                         data-win-options="{
+                             layout: {type: WinJS.UI.ListLayout},
+                         }"></div>
+                </div>
+
+                <div class="section7 section" data-win-control="WinJS.UI.PivotItem" data-win-options="{ isHeaderStatic: true, header: 'Donate' }">
+                    <div class="sectioncontrol" id="section7contenthost" data-win-control="HubApps_SectionControls.Section7Control"></div>
                 </div>
             </div>
         </section>

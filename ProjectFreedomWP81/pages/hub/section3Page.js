@@ -7,21 +7,32 @@
         // the resulting elements have been parented to the DOM. 
         ready: function (element, options) {
             options = options || {};
-            WinJS.Utilities.startLog('pageControlInside');
+            //WinJS.Utilities.startLog('pageControlInside');
             //console.log('ITEM PAGE RENDERED');
             //console.log('ELEMENT BEFORE REFRESH');
             //console.log(element);
-            let feed = Reason.allFeeds.Blog; // attach the appropriate feed
+            let feed = Reason.allFeeds.TV; // attach the appropriate feed
             let lv = element.querySelector('.itemslist');
             //lv.style.display = 'none';
-            WinJS.Namespace.define('Reason.currentData', {
-                feed: feed,
-                element: element
-            });
+            console.log('section3 Reason.currentData:');
+            console.log(Reason.currentData);
+            Reason.currentData.feed = feed;
+            Reason.currentData.element = element;
+            //WinJS.Namespace.define('Reason.currentData', {
+            //    feed: feed,
+            //    element: element
+            //});
+            console.log('currentData after assignment:');
+            console.log(Reason.currentData);
             let listView = lv.winControl;
+            console.log('feed before previous:');
+            console.log(feed);
             //reload previous from saved file
             Helpers.readPrevious(feed, listView);
-
+            console.log('feed after previous:');
+            console.log(feed);
+            console.log('feed.firstStart:');
+            console.log(feed.firstStart);
             //was the app started? if so refresh content
             if (feed.firstStart || !feed.previous) {
                 WinJS.log && WinJS.log('initial load', 'pageControlInside', 'INFO');
@@ -30,7 +41,7 @@
             }
 
             //load the scroll position for listview
-            Helpers.loadLVPosition(listView);
+            Helpers.loadLVPosition(listView, feed.name);
 
             listView.layout = options.layout;
             //listView.oniteminvoked = options.oniteminvoked;
@@ -41,7 +52,7 @@
                     currentItem: item
                 });
                 WinJS.Navigation.navigate("/pages/item/item.html", { item: Reason.currentItem, type: 'Blog' });
-                Helpers.saveLVPosition(listView);
+                Helpers.saveLVPosition(listView, feed.name);
             });
           
 

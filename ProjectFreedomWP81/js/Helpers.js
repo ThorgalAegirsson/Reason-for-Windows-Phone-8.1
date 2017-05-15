@@ -76,15 +76,20 @@
             });
     }
 
-    function saveLVPosition(lv) {
-        WinJS.Application.sessionState.scrollPosition = lv.scrollPosition;
-        //console.log('scrollPosition saved:');
-        //console.log(WinJS.Application.sessionState.scrollPosition);
+    function saveLVPosition(lv, feedName) {
+        let appState = WinJS.Application.sessionState;
+        if (!appState.scrollPosition) appState.scrollPosition = {};
+        appState.scrollPosition[feedName] = lv.scrollPosition;
+
+        console.log('scrollPosition saved in: '+feedName);
+        console.log(appState.scrollPosition[feedName]);
     }
 
-    function loadLVPosition(lv) {
+    function loadLVPosition(lv, feedName) {
         setImmediate(function () {
-            let scrollPosition = WinJS.Application.sessionState.scrollPosition;
+            let scrollPosition;
+            let appState = WinJS.Application.sessionState;
+            if (appState.scrollPosition) scrollPosition = appState.scrollPosition[feedName];
             if (scrollPosition) lv.scrollPosition = scrollPosition;
         });
     }
@@ -92,8 +97,8 @@
     function readPrevious(feed, listView) {
         let appData = Windows.Storage.ApplicationData.current;
         let fileName = 'previous' + feed.name + '.txt';
-        //console.log('reading from previous:');
-        //console.log(fileName);
+        console.log('reading from previous:');
+        console.log(fileName);
         appData.localFolder.getFileAsync(fileName)
             .then(function (file) {
                 return Windows.Storage.FileIO.readTextAsync(file);
@@ -109,6 +114,7 @@
                 console.log('previous loaded console');
                 let list = new WinJS.Binding.List(feed.previous);
                 listView.itemDataSource = list.dataSource;
+                console.log(listView);
                 //}
             });
     }

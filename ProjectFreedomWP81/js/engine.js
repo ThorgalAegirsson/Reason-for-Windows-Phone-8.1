@@ -1,6 +1,6 @@
 ﻿(function () {
     'use strict';
-    WinJS.Utilities.startLog('retrieveFeed pageControl');
+    WinJS.Utilities.startLog('retrieveFeed1 pageControl1');
     console.clear();
     
     
@@ -84,10 +84,11 @@
 
     
 
-    function retrieveFeed(feedObject, lv) {
+    function retrieveFeed(feed, lv) {
+        complete = false;
         let feedArr = [];
         let client = new Windows.Web.Syndication.SyndicationClient();
-        let url = feedObject.url;
+        let url = feed.url;
         //let defaultPic = '/images/reasonlogo.png';
         let uri = null;
         try {
@@ -103,9 +104,9 @@
         WinJS && WinJS.log('start retrieving...', 'retrieveFeed', 'INFO');
         client.setRequestHeader("User-Agent", "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)");
 
-        client.retrieveFeedAsync(uri).then(function (feed) {
-            document.querySelector('.feedStatus').style.display = 'none';
-            currentFeed = feed;
+        client.retrieveFeedAsync(uri).then(function (feedData) {
+            //document.querySelector('.feedStatus').style.display = 'none';
+            currentFeed = feedData;
             WinJS.log && WinJS.log('Feed download complete', 'retrieveFeed retrieveFeedAsync', 'INFO');
             let title = '(no title)';
             if (currentFeed.title) title = currentFeed.title.text;
@@ -117,23 +118,25 @@
             currentItemIndex = 0;
             if (currentFeed.items.size > 0) {
                 for (; currentItemIndex < currentFeed.items.size; currentItemIndex++) {
-                    createFeedObj(currentItemIndex, feedArr);
+                    _createFeedObj(currentItemIndex, feedArr);
                     if (currentItemIndex === currentFeed.items.size - 1) complete = true;
                 }
             }
             WinJS && WinJS.log("Items: " + currentFeed.items.size, 'retrieveFeed retrieveFeedAsync', 'INFO');
             WinJS && WinJS.log("latest feedObject: ", 'retrieveFeed retrieveFeedAsync', 'INFO');
+            console.log('feedArr that should go into feed.current:');
             console.log(feedArr);
-            feedObject.current = feedArr;
+            if (feedArr.length > 50) feedArr.splice(50);
+            feed.current = feedArr;
             //lv.itemDataSource = new WinJS.Binding.List(feedObject.current).dataSource;
-            feedObject.previous = feedArr;
-            return feedObject;
+            feed.previous = feedArr;
+            return feed;
         }, onError, onProgress);
         return new WinJS.Promise(function (done, error, progress) {
             let intervalID = setInterval(function () {
                 //progress(doneFeed.length);
                 if (complete) {
-                    done(feedObject);
+                    done(feed);
                     clearInterval(intervalID);
                 }
             }, 50);
@@ -164,14 +167,15 @@
         //Helpers.testConnection();
         console.log('element in refreshFeed:');
         console.log(element);
-        element.querySelector('.feedStatus').style.display = '';
+        element.querySelector('.feedStatus').classList.toggle('hide');
         let lv = element.querySelector('.itemslist');
         let listView = lv.winControl;
         
         WinJS.log && WinJS.log('feed refreshed', 'pageControl', 'INFO');
         Reason.retrieve(feed, listView).done(
             function (feed) {
-                document.querySelector('.feedStatus').style.display = 'none';
+                console.log('feed retrieve finished');
+                //element.querySelector('.feedStatus').style.display = 'none';
                 WinJS.log && WinJS.log('listview' + listView, 'pageControl', 'INFO');
                 WinJS.log && WinJS.log('                                              feed final:', 'pageControl', 'INFO');
                 WinJS.log && WinJS.log(feed, 'pageControl', 'INFO');
@@ -179,7 +183,10 @@
                     // THIS HAPPENS ONLY SOMETIMES ALTHOUGH THE SITUATION IS EXACTLY THE SAME:
                     //When connection lost and then reconnected, user navigates to an item and back to the listview an error is thrown in UI.JS - why!?!
                     //Possibly I could return a promise with the feed and populate listview in section page itself, maybe that would help... If not - debug steps in ui.js
+                    console.log('feed.current that should go into listview after retrieve:');
+                    console.log(feed.current);
                     listView.itemDataSource = new WinJS.Binding.List(feed.current).dataSource;
+                    console.log('listview populated');
                 } catch (e) {
                     console.log('ERROR:');
                     console.log(e);
@@ -188,15 +195,20 @@
                 feed.firstStart = false;
                 Helpers.savePrevious(feed);
                 console.log('previous saved');
-                document.querySelector('.feedStatus').style.display = 'none';
-                lv.style.display = '';
+                //console.log('status:');
+                //console.log(element.querySelector('.feedStatus'));
+                element.querySelector('.feedStatus').classList.toggle('hide');
+                //console.log(element.querySelector('.feedStatus'));
+                console.log('listview that should show up:');
+                console.log(lv);
+                //lv.style.display = '';
             },
             function error() {
-                document.querySelector('.feedStatus').style.display = 'none';
+                element.querySelector('.feedStatus').classList.toggle('hide');
                 //feed.firstStart = true;
                 Windows.UI.Popups.MessageDialog("I couln't download the articles. Check your internet connection").showAsync();
                 listView.itemDataSource = new WinJS.Binding.List(feed.previous).dataSource;
-                lv.style.display = '';
+                //lv.style.display = '';
                 //element.querySelector('.feedStatus').innerHTML = "<p>Something went wrong. Do you have the internet connection? Try again later...</p>"
                 //element.querySelector('.feedStatus').style.display = '';
                 //let intervalID = window.setTimeout(function () {
@@ -256,7 +268,7 @@
         return parser.parseFromString(content, 'text/html');
     }
 
-    function createFeedObj(currentItemIndex, feedArr) {
+    function _createFeedObj(currentItemIndex, feedArr) {
         
         let item = currentFeed.items[currentItemIndex];
         WinJS && WinJS.log('ITEM DURATION:', 'createFeed', 'INFO');

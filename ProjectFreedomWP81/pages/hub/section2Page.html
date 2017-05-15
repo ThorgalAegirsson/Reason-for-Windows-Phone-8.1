@@ -5,15 +5,37 @@
     <script src="/pages/hub/section2Page.js"></script>
 </head>
 <body>
-    <div class="fragment section2page">
+    <div class="fragment sectionLVpage">
+
         <section aria-label="Main content" role="main">
-            <div class="item-title label-medium" data-win-res="{ textContent: 'Section2ItemTitle' }"></div>
-            <div class="article-header label-extralarge" data-win-res="{ textContent: 'Section2Subtext' }"></div>
-            <div class="subtitle label-medium" data-win-res="{ textContent: 'Section2ItemSubTitle' }"></div>
-            <div class="label-mediummid">
-                <span data-win-res="{ textContent: 'Section2Description' }"></span>
-                <span data-win-res="{ textContent: 'Section2Description' }"></span>
-                <span data-win-res="{ textContent: 'Section2Description' }"></span>
+            <div class="feedStatus hide">
+                <progress class="feedLoadingProgress"></progress>
+            </div>
+            <div class="itemTemplate" data-win-control="WinJS.Binding.Template">
+                <div class="templatecontainer">
+                    <div class="logo" data-win-bind="style.backgroundImage: picture MyConverters.cssUrl">
+                        <!--<img alt="logo" data-win-bind="src: picture" />-->
+                    </div>
+                    <div class="itemcontainer">
+                        <div class="titleDiv">
+                            <h3 data-win-bind="innerHTML: title"></h3>
+                        </div>
+
+                        <h4 data-win-bind="textContent: author MyConverters.authorStringOnly"></h4>
+                        <!--<a data-win-bind="href: link"><span data-win-bind="innerText: link"></span></a>-->
+                    </div>
+                    <!--<img src="#" data-win-bind="src: backgroundImage; alt: title"/>
+                        <div class="itemcontainer">
+                            <div class="itemtitle label-extralarge" data-win-bind="textContent: title"></div>
+                            <div class="label-mediummid" data-win-res="{ textContent: 'Section3Description' }" style="height: 82px;"></div>
+                    </div>-->
+                </div>
+            </div>
+
+            <div class="itemslist win-selectionstylefilled" data-win-control="WinJS.UI.ListView" data-win-options="{
+                        selectionMode: 'none',
+                        itemTemplate: select('.itemTemplate')
+                    }">
             </div>
         </section>
     </div>
