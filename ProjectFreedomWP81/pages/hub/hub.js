@@ -7,8 +7,8 @@
     let netInfo = Windows.Networking.Connectivity.NetworkInformation;
 
     // Get the groups used by the data-bound sections of the Hub.
-    var section3Group = Data.resolveGroupReference("group4");
-    var section3Items = Data.getItemsFromGroup(section3Group);
+    //var section3Group = Data.resolveGroupReference("group4");
+    //var section3Items = Data.getItemsFromGroup(section3Group);
 
     WinJS.UI.Pages.define("/pages/hub/hub.html", {
         processed: function (element) {
@@ -19,10 +19,46 @@
         // populates the page elements with the app's data.
         ready: function (element, options) {
             var hub = element.querySelector(".hub").winControl;
+
+            //appBar commands
+            let appBar = document.querySelector('#appbar').winControl;
+            if (appBar) appBar.showOnlyCommands(['cmdRefresh', 'cmdSettings']);
+            document.querySelector('#cmdRefresh').addEventListener('click', Helpers.refreshButtonHandler, false);
+            document.querySelector('#cmdSettings').addEventListener('click', Helpers.settingsButtonHandler, false);
+            document.querySelector('#cmdFavRemoveAll').addEventListener('click', HubApps_SectionControls._deleteHandler, false);
+
             if (session.lastSectionIndex) hub.selectedIndex = session.lastSectionIndex;
-            if (!hub.onselectionchanged) hub.onselectionchanged = function (args) {
+            hub.onselectionchanged = function (args) {
                 session.lastSectionIndex = args.detail.index;
+                console.log('Reason.currentData on hub selection:');
+                console.log(Reason.currentData);
+                Reason.currentData.feed = Reason.allFeeds[args.detail.item.header];
+                if (Reason.currentData.feed) Reason.currentData.element = Reason.currentData.feed.element;
+                console.log('Reason.currentData on hub selection after assigning:');
+                console.log(Reason.currentData);
+                console.log('current feed: ');
+                console.log(Reason.currentData.feed);
+                console.log('current element: ');
+                console.log(Reason.currentData.element);
+                switch (args.detail.item.header) {
+                    case "Donate":
+                        appBar.showOnlyCommands(['cmdSettings']);
+                        break;
+                    case "Saved":
+                        appBar.showOnlyCommands(['cmdFavRemoveAll', 'cmdSettings']);
+                        break;
+                    default:
+                        appBar.showOnlyCommands(['cmdRefresh', 'cmdSettings']);
+                }
+                console.log('pivot item:');
+                console.log(args.detail.index);
+                console.log(args.detail.item.header);
+                
+                console.log('pivot args object:')
+                //console.log(Reason.allFeeds[args.detail.item.header]);
+                console.log(args);
             }
+
             hub.onheaderinvoked = function (args) {
                 args.detail.section.onheaderinvoked(args);
             };
@@ -36,10 +72,11 @@
 
             // TODO: Initialize the page here.
             
-            let appBar = document.querySelector('#appbar').winControl;
-            if (appBar) appBar.showOnlyCommands(['cmdRefresh', 'cmdSettings']);
-            document.querySelector('#cmdRefresh').addEventListener('click', Helpers.refreshButtonHandler, false);
-            document.querySelector('#cmdSettings').addEventListener('click', Helpers.settingsButtonHandler, false);
+            //let appBar = document.querySelector('#appbar').winControl;
+            //if (appBar) appBar.showOnlyCommands(['cmdRefresh', 'cmdSettings']);
+            //document.querySelector('#cmdRefresh').addEventListener('click', Helpers.refreshButtonHandler, false);
+            //document.querySelector('#cmdSettings').addEventListener('click', Helpers.settingsButtonHandler, false);
+            //document.querySelector('#cmdFavRemoveAll').addEventListener('click', HubApps_SectionControls._deleteHandler, false);
         },
 
         //section3DataSource: section3Items.dataSource,

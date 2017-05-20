@@ -7,23 +7,27 @@
         // the resulting elements have been parented to the DOM. 
         ready: function (element, options) {
             options = options || {};
-            WinJS.Utilities.startLog('pageControlInside');
+            //WinJS.Utilities.startLog('pageControlInside');
             //console.log('ITEM PAGE RENDERED');
             //console.log('ELEMENT BEFORE REFRESH');
             //console.log(element);
-            let feed = Reason.allFeeds.Podcast; // attach the appropriate feed
             let lv = element.querySelector('.itemslist');
+            let feed = Reason.allFeeds.Podcast; // attach the appropriate feed
+            feed.element = element;
+            Reason.currentData.element = element;
+            Reason.currentData.feed = feed;
             //lv.style.display = 'none';
-            WinJS.Namespace.define('Reason.currentData', {
-                feed: feed,
-                element: element
-            });
+            //WinJS.Namespace.define('Reason.currentData', {
+            //    feed: feed,
+            //    element: element
+            //});
             let listView = lv.winControl;
             //reload previous from saved file
             Helpers.readPrevious(feed, listView);
 
             //was the app started? if so refresh content
             if (feed.firstStart || !feed.previous) {
+                console.log('first start in section');
                 WinJS.log && WinJS.log('initial load', 'pageControlInside', 'INFO');
                 Reason.refreshFeed(feed, element);
                 //feed.firstStart = false; //moved to refreshFeed
@@ -43,8 +47,6 @@
                 WinJS.Navigation.navigate("/pages/item/item.html", { item: Reason.currentItem, type: 'Blog' });
                 Helpers.saveLVPosition(listView);
             });
-
-
         },
 
         unload: function () {

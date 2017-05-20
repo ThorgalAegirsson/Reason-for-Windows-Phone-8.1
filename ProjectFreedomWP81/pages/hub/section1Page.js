@@ -11,35 +11,36 @@
             //console.log('ITEM PAGE RENDERED');
             //console.log('ELEMENT BEFORE REFRESH');
             //console.log(element);
+            let lv = element.querySelector('.itemslist');
             let feed = Reason.allFeeds.Blog; // attach the appropriate feed
+            feed.element = element;
+            Reason.currentData.element = element;
+            Reason.currentData.feed = feed;
+
             console.log('section1 feed:');
             console.log(feed);
-            let lv = element.querySelector('.itemslist');
+            
             //lv.style.display = 'none';
-            console.log('section1 Reason.currentData:');
-            console.log(Reason.currentData); //null
-            Reason.currentData.feed = feed; 
-            Reason.currentData.element = element;
             //WinJS.Namespace.define('Reason.currentData', {
             //    feed: feed,
             //    element: element
             //});
-            console.log('currentData after assignment:');
-            console.log(Reason.currentData); // !!! shows feed that is not correct !!!
-            console.log('currentData.feed after assignment:');
-            console.log(Reason.currentData.feed);
+            //console.log('currentData after assignment:');
+            //console.log(Reason.currentData); // !!! shows feed that is not correct !!!
+            //console.log('currentData.feed after assignment:');
+            //console.log(Reason.currentData.feed);
             
             let listView = lv.winControl;
-            console.log('feed before previous:');
-            console.log(feed);
+            //console.log('feed before previous:');
+            //console.log(feed);
             //reload previous from saved file
             Helpers.readPrevious(feed, listView);
-            console.log('feed after previous:');
-            console.log(feed);
+            //console.log('feed after previous:');
+            //console.log(feed);
 
             //was the app started? if so refresh content
             if (feed.firstStart || !feed.previous) {
-                console.log('calling refreshFeed');
+                console.log('first start in section');
                 WinJS.log && WinJS.log('initial load', 'pageControlInside', 'INFO');
                 Reason.refreshFeed(feed, element);
                 //feed.firstStart = false; //moved to refreshFeed
@@ -59,8 +60,6 @@
                 WinJS.Navigation.navigate("/pages/item/item.html", { item: Reason.currentItem, type: 'Blog' });
                 Helpers.saveLVPosition(listView, feed.name);
             });
-
-
         },
 
         unload: function () {

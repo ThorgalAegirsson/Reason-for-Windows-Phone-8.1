@@ -26,6 +26,9 @@
         let savedArticles = Reason.savedArticles.map(function(savedItem){
             return savedItem.origLink;
         });
+        console.log('origLink to be saved:');
+        console.log(item.origLink);
+
         let index = savedArticles.indexOf(item.origLink);
         if (index === -1) {
             Reason.savedArticles.push(item);
@@ -33,6 +36,7 @@
             Reason.savedArticles[index] = item;
         }
         let errMsg = "I couldn't save your article. Spare me! I beg you!";
+        console.log(Reason.savedArticles);
         _updateLocalStorage(Reason.savedArticles, 'savedArticles.txt', errMsg);
    }
 
@@ -46,6 +50,38 @@
         Reason.savedArticles.splice(index, 1);
         let errMsg = "I couldn't remove your article. Spare me! I beg you!";
         _updateLocalStorage(Reason.savedArticles, 'savedArticles.txt', errMsg);
+    }
+
+    function removeAllArticles(e) {
+        let msg = new Windows.UI.Popups.MessageDialog('Are you sure you want to delete all your saved articles?', 'Warning!');
+        msg.options
+        msg.commands.append(new Windows.UI.Popups.UICommand('I am sure!'));
+        msg.commands.append(new Windows.UI.Popups.UICommand('Hell, no!'));
+        msg.showAsync().done(_removeAllArticlesHandler);
+
+    }
+
+    function _removeAllArticlesHandler(command) {
+        let complete = false;
+        if (command.label === 'I am sure!') {
+
+            console.log('removing articles...');
+            Reason.savedArticles = [];
+            let errMsg = 'Something went wrong. Try again later...';
+            _updateLocalStorage(Reason.savedArticles, 'savedArticles.txt', errMsg).then(function success() {
+                complete = true;
+            });
+            return new WinJS.Promise(function (done, error, success) {
+                let intervalID = setInterval(function () {
+                    if (complete) {
+                        clearInterval(intervalID);
+                        done();
+                    }
+                }, 50);
+            });
+            
+        }
+        
     }
 
     function refreshButtonHandler(e) {
@@ -74,6 +110,7 @@
                 let msg = errMsg || 'Something went wrong with localStorage file';
                 new Windows.UI.Popups.MessageDialog(msg);
             });
+        return WinJS.Promise.timeout();
     }
 
     function saveLVPosition(lv, feedName) {
@@ -181,6 +218,7 @@
         shareLink: shareLink,
         saveArticle: saveArticle,
         removeArticle: removeArticle,
+        removeAllArticles: removeAllArticles,
         savePrevious: savePrevious,
         readPrevious: readPrevious,
         saveLVPosition: saveLVPosition,

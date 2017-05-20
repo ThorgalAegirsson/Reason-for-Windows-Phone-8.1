@@ -7,17 +7,17 @@
         // the resulting elements have been parented to the DOM. 
         ready: function (element, options) {
             options = options || {};
-            WinJS.Utilities.startLog('pageControlInside');
+            //WinJS.Utilities.startLog('pageControlInside');
             //console.log('ITEM PAGE RENDERED');
             //console.log('ELEMENT BEFORE REFRESH');
             //console.log(element);
             let feed = Reason.allFeeds.Blog; // attach the appropriate feed
             let lv = element.querySelector('.itemslist');
             //lv.style.display = 'none';
-            WinJS.Namespace.define('Reason.currentData', {
-                feed: feed,
-                element: element
-            });
+            //WinJS.Namespace.define('Reason.currentData', {
+            //    feed: feed,
+            //    element: element
+            //});
             let listView = lv.winControl;
             //reload previous from saved file
             Helpers.readPrevious(feed, listView);
@@ -43,8 +43,6 @@
                 WinJS.Navigation.navigate("/pages/item/item.html", { item: Reason.currentItem, type: 'Blog' });
                 Helpers.saveLVPosition(listView);
             });
-
-
         },
 
         unload: function () {

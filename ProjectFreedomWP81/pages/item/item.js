@@ -37,8 +37,13 @@
             }
             //configure appbar
 			let appBar = document.querySelector('#appbar').winControl;
-			if (appBar) appBar.showOnlyCommands(['articleFav', 'articleBrowser', 'articleShare']);
-			document.querySelector('#articleFav').addEventListener('click', Helpers.saveArticle, false);
+			if (options.type === 'savedArticles') {
+			    if (appBar) appBar.showOnlyCommands(['articleFavRemove', 'articleBrowser', 'articleShare']);
+			    document.querySelector('#articleFavRemove').addEventListener('click', Helpers.removeArticle, false);
+			} else {
+			    if (appBar) appBar.showOnlyCommands(['articleFav', 'articleBrowser', 'articleShare']);
+			    document.querySelector('#articleFav').addEventListener('click', Helpers.saveArticle, false);
+			}
 			document.querySelector('#articleBrowser').addEventListener('click', Helpers.openLink, false);
 			document.querySelector('#articleShare').addEventListener('click', Helpers.showShareUI, false);
         },

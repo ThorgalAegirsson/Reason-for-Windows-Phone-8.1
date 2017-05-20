@@ -2,131 +2,136 @@
     'use strict';
     WinJS.Utilities.startLog('retrieveFeed1 pageControl1');
     console.clear();
-    
-    
-    let appData = Windows.Storage.ApplicationData.current;
-    console.log('maximum roaming:');
-    console.log(appData.roamingStorageQuota);
-    
-    
-    let complete = false;
 
     //Saved articles into local storage
     //it is saved into a file because the localstorage values can't be longer than 8kB
+    let appData = Windows.Storage.ApplicationData.current;
     let savedArticles = [];
     appData.localFolder.getFileAsync('savedArticles.txt')
         .then(function (file) {
             return Windows.Storage.FileIO.readTextAsync(file);
-            console.log('savedArticles open');
+            //console.log('savedArticles open');
         }, function error(file) {
             //appData.localFolder.createFileAsync('savedArticles.txt');
-            console.log('savedArticles created');
+            //console.log('savedArticles created');
             })
         .then(function (contents) {
             if (contents) savedArticles = JSON.parse(contents);
             WinJS.Namespace.define('Reason', {
                 savedArticles: savedArticles
             });
-            console.log('savedArticles:');
-            console.log(savedArticles);
         });
-
-    
-    //let savedArticlesContainer = appData.localSettings.createContainer('savedArticles', Windows.Storage.ApplicationDataCreateDisposition.always);
-    //if (savedArticlesContainer.values.hasKey('savedArticles')) savedArticles = JSON.parse(savedArticlesContainer.values['savedArticles']);
-    //console.log('savedArticles in roaming: ');
-    //console.log(savedArticles);
-
-
     //END OF LOCAL STORAGE
 
+
+    //let complete = false;
     let currentFeed = null;
     let mediaFeed = false;
-    let currentItemIndex = 0;
-    let defaultPic = '/images/reasonlogo.png';
+    let orgFeed = false;
+    let currentItemIndex;
+    //let defaultPic = '';
     let ReasonFeed = {
         Blog: {
             name: 'Blog',
             url: 'http://feeds.feedburner.com/reason/HitandRun?format=xml',
             firstStart: true,
             previous: null,
-            current: null
+            current: null,
+            element: null
         },
         Articles: {
             name: 'Articles',
             url: 'http://feeds.feedburner.com/reason/Articles?format=xml',
             firstStart: true,
             previous: null,
-            current: null
+            current: null,
+            element: null
         },
-        TV: {
+        ReasonTV: {
             name: 'TV',
             url: 'http://reason.com/itunes/index.xml',
             firstStart: true,
             previous: null,
-            current: null
+            current: null,
+            element: null
         },
         Podcast: {
             name: 'Podcast',
             url: 'http://reason.com/podcast/index.xml',
             firstStart: true,
             previous: null,
-            current: null
+            current: null,
+            element: null
         },
-        Org: {
+        'Reason.Org': {
             name: 'org',
-            url: 'http://reason.org/rss/index.xml',
+            url: 'http://reason.org/news/index.xml',
             firstStart: true,
             previous: null,
-            current: null
+            current: null,
+            element: null
         }
     };
 
     
 
     function retrieveFeed(feed, lv) {
-        complete = false;
+        console.log("RETRIEVE FEED STARTED:");
+        let complete = false;
+        //defaultPic = '/images/reasonlogo.png';
+        mediaFeed = false;
+        orgFeed = false;
         let feedArr = [];
         let client = new Windows.Web.Syndication.SyndicationClient();
+        console.log('feed:');
+        console.log(feed);
         let url = feed.url;
-        //let defaultPic = '/images/reasonlogo.png';
+        if (url === 'http://reason.org/news/index.xml') {
+            //console.log('default pic changed');
+            //defaultPic = 'http://reason.org/media/images/logo.png';
+            orgFeed = true;
+        }
         let uri = null;
         try {
             uri = new Windows.Foundation.Uri(url);
-            if (url === 'http://reason.org/rss/index.html') {
-                defaultPic = 'http://reason.org/media/images/logo.png';
-            }
             WinJS.log && WinJS.log('log uri ' + uri, 'retrieveFeed', 'INFO');
         } catch (err) {
-            
+            console.log('error while setting uri:');
+            console.log(err);
             WinJS.log && WinJS.log('Error: Invalid URI' + err, 'retrieveFeed', 'ERROR');
         }
         WinJS && WinJS.log('start retrieving...', 'retrieveFeed', 'INFO');
         client.setRequestHeader("User-Agent", "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)");
 
         client.retrieveFeedAsync(uri).then(function (feedData) {
+            
+            console.log('feed url: ' + url);
             //document.querySelector('.feedStatus').style.display = 'none';
             currentFeed = feedData;
             WinJS.log && WinJS.log('Feed download complete', 'retrieveFeed retrieveFeedAsync', 'INFO');
             let title = '(no title)';
             if (currentFeed.title) title = currentFeed.title.text;
+            //console.log('currentFeed.title: ' + title);
             //document.querySelector('#outcome').innerText = title;
             mediaFeed = (title === 'Reason Video Podcast'||title === 'Reason Podcast') ? true : false;
             WinJS && WinJS.log('mediaFeed: ' + mediaFeed, 'retrieveFeed retrieveFeedAsync', 'INFO');
-
-
+            console.log('media feed: ' + mediaFeed);
+            console.log('currentFeed:');
+            console.log(currentFeed);
             currentItemIndex = 0;
             if (currentFeed.items.size > 0) {
-                for (; currentItemIndex < currentFeed.items.size; currentItemIndex++) {
+                let feedSize = currentFeed.items.size;
+                if (feedSize > 40) feedSize = 40; // media feeds are too long (100 elements)
+                for (; currentItemIndex < feedSize; currentItemIndex++) {
                     _createFeedObj(currentItemIndex, feedArr);
-                    if (currentItemIndex === currentFeed.items.size - 1) complete = true;
+                    if (currentItemIndex === feedSize - 1) complete = true;
                 }
             }
             WinJS && WinJS.log("Items: " + currentFeed.items.size, 'retrieveFeed retrieveFeedAsync', 'INFO');
             WinJS && WinJS.log("latest feedObject: ", 'retrieveFeed retrieveFeedAsync', 'INFO');
-            console.log('feedArr that should go into feed.current:');
-            console.log(feedArr);
-            if (feedArr.length > 50) feedArr.splice(50);
+            //console.log('feedArr that should go into feed.current:');
+            //console.log(feedArr);
+            //if (feedArr.length > 50) feedArr.splice(50);
             feed.current = feedArr;
             //lv.itemDataSource = new WinJS.Binding.List(feedObject.current).dataSource;
             feed.previous = feedArr;
@@ -135,6 +140,7 @@
         return new WinJS.Promise(function (done, error, progress) {
             let intervalID = setInterval(function () {
                 //progress(doneFeed.length);
+                //console.log('is complete: ' + complete);
                 if (complete) {
                     done(feed);
                     clearInterval(intervalID);
@@ -144,15 +150,16 @@
     }
 
     function onProgress() {
-        document.querySelector('.feedStatus').style.display = '';
+        //element.querySelector('.feedStatus').style.display = '';
         WinJS.log && WinJS.log('downloading...', 'retrieveFeed promise', 'INFO');
     }
 
     function onError(err) {
+        console.log('FEED RETRIEVE ERROR => MessageDialog shows up !!!');
         WinJS.log && WinJS.log(err, 'retrieveFeed promise', 'ERROR');
         WinJS.log && WinJS.log("ERROR ERROR ERROR", 'retrieveFeed promise', 'ERROR');
-        Windows.UI.Popups.MessageDialog("I couldn't download new articles. Are you connected to the Internet?").showAsync();
-        document.querySelector('.feedStatus').style.display = 'none';
+        Windows.UI.Popups.MessageDialog("I couldn't download new articles. Make sure you're connected to the Internet.").showAsync();
+        //document.querySelector('.feedStatus').style.display = 'none';
         //Helpers.readPrevious(feed, lv);
         //document.querySelector('.feedStatus').textContent = "Couldn't download the articles!!!";
         //document.querySelector('.feedStatus').style.display = '';
@@ -164,17 +171,21 @@
     }
 
     function refreshFeed(feed, element) {
+        //let defaultPic = '';
         //Helpers.testConnection();
-        console.log('element in refreshFeed:');
+        console.log("REFRESH FEED STARTED WITH:");
+        console.log('element:');
         console.log(element);
-        element.querySelector('.feedStatus').classList.toggle('hide');
+        console.log('feed:');
+        console.log(feed);
+        element.querySelector('.feedStatus').classList.remove('hide');
         let lv = element.querySelector('.itemslist');
         let listView = lv.winControl;
         
         WinJS.log && WinJS.log('feed refreshed', 'pageControl', 'INFO');
         Reason.retrieve(feed, listView).done(
             function (feed) {
-                console.log('feed retrieve finished');
+                console.log('FEED REFRESH finished');
                 //element.querySelector('.feedStatus').style.display = 'none';
                 WinJS.log && WinJS.log('listview' + listView, 'pageControl', 'INFO');
                 WinJS.log && WinJS.log('                                              feed final:', 'pageControl', 'INFO');
@@ -188,23 +199,24 @@
                     listView.itemDataSource = new WinJS.Binding.List(feed.current).dataSource;
                     console.log('listview populated');
                 } catch (e) {
-                    console.log('ERROR:');
+                    console.log('ERROR WHILE POPULATING LISTVIEW INSIDE REFRESH:');
                     console.log(e);
                 }
                 
                 feed.firstStart = false;
                 Helpers.savePrevious(feed);
-                console.log('previous saved');
+                //console.log('previous saved');
                 //console.log('status:');
                 //console.log(element.querySelector('.feedStatus'));
-                element.querySelector('.feedStatus').classList.toggle('hide');
+                if (element.querySelector('.feedStatus')) element.querySelector('.feedStatus').classList.add('hide');
                 //console.log(element.querySelector('.feedStatus'));
                 console.log('listview that should show up:');
                 console.log(lv);
                 //lv.style.display = '';
             },
             function error() {
-                element.querySelector('.feedStatus').classList.toggle('hide');
+                console.log("REFRESH ERROR");
+                if (element.querySelector('.feedStatus')) element.querySelector('.feedStatus').classList.add('hide');
                 //feed.firstStart = true;
                 Windows.UI.Popups.MessageDialog("I couln't download the articles. Check your internet connection").showAsync();
                 listView.itemDataSource = new WinJS.Binding.List(feed.previous).dataSource;
@@ -270,6 +282,17 @@
 
     function _createFeedObj(currentItemIndex, feedArr) {
         
+        let defaultPic = '/images/reasonlogo.png';
+        console.log('currentFeed.title inside createfeedobj');
+        console.log(currentFeed.title.text);
+        if (currentFeed.title.text === 'Reason Foundation -') {
+            console.log('default pic changed');
+            defaultPic = 'http://reason.org/media/images/logo.png';
+        }
+        if (mediaFeed && currentFeed.imageUri) {
+            console.log('media pic');
+            defaultPic = currentFeed.imageUri.absoluteUri;
+        }
         let item = currentFeed.items[currentItemIndex];
         WinJS && WinJS.log('ITEM DURATION:', 'createFeed', 'INFO');
         WinJS && WinJS.log(item.duration, 'createFeed', 'INFO');
@@ -279,6 +302,7 @@
         let title = '(no title)';
         if (item.title) title = item.title.text;
         feedObject.title = title;
+        
         WinJS && WinJS.log('Title: ' + feedObject.title, 'createFeed', 'INFO');
 
         if (item.links.size > 0) feedObject.link = item.links[0].uri.absoluteUri;
@@ -333,7 +357,13 @@
         WinJS && WinJS.log(published.articleDate, 'createFeed', 'INFO');
         WinJS && WinJS.log(published.articleDateName, 'createFeed', 'INFO');
 
+        //links
+        
+        feedObject.origLink = item.links[0].uri.absoluteUri;
+
         if (item.links[1]) feedObject.origLink = item.links[1].uri.absoluteUri; //if it's a media feed the link to the article is here
+
+        //extensions overwriting previous values
         for (let i = 0; i < item.elementExtensions.size; i++) {
             WinJS && WinJS.log('Extensions: ', 'createFeed', 'INFO');
             WinJS && WinJS.log(item.elementExtensions, 'createFeed', 'INFO');
@@ -352,7 +382,7 @@
                 case 'author':
                     if (extension.elementExtensions[0]) {
                         author[0].name = extension.elementExtensions[0].nodeValue;
-                        author[0].email = extension.elementExtensions[1].nodeValue;
+                        if (extension.elementExtensions[1]) author[0].email = extension.elementExtensions[1].nodeValue;
                         feedObject.author = author;
                     }
                     break;
@@ -372,13 +402,16 @@
         
         let contentHTML = _parseContent(feedObject.content);
         let firstPic = contentHTML.getElementsByTagName('div')[0].getElementsByTagName('img')[0];
+        console.log(firstPic);
+        console.log('orgFeed: ' + orgFeed);
         if (firstPic) {
             feedObject.picture = firstPic.src;
-        } else if (mediaFeed && currentFeed.imageUri) {
-            feedObject.picture = currentFeed.imageUri.absoluteUri;
         } else {
             feedObject.picture = defaultPic;
         }
+        if (mediaFeed && currentFeed.imageUri) feedObject.picture = defaultPic;
+        if (orgFeed) feedObject.picture = defaultPic;
+
 
         WinJS && WinJS.log('media feed: ' + mediaFeed);
         let firstVid = contentHTML.getElementsByTagName('iframe')[0];
