@@ -7,41 +7,9 @@
         // the resulting elements have been parented to the DOM. 
         ready: function (element, options) {
             options = options || {};
-            //WinJS.Utilities.startLog('pageControlInside');
-            //console.log('ITEM PAGE RENDERED');
-            //console.log('ELEMENT BEFORE REFRESH');
-            //console.log(element);
-            let feed = Reason.allFeeds.Blog; // attach the appropriate feed
-            let lv = element.querySelector('.itemslist');
-            //lv.style.display = 'none';
-            //WinJS.Namespace.define('Reason.currentData', {
-            //    feed: feed,
-            //    element: element
-            //});
-            let listView = lv.winControl;
-            //reload previous from saved file
-            Helpers.readPrevious(feed, listView);
-
-            //was the app started? if so refresh content
-            if (feed.firstStart || !feed.previous) {
-                WinJS.log && WinJS.log('initial load', 'pageControlInside', 'INFO');
-                Reason.refreshFeed(feed, element);
-                //feed.firstStart = false; //moved to refreshFeed
-            }
-
-            //load the scroll position for listview
-            Helpers.loadLVPosition(listView);
-
-            listView.layout = options.layout;
-            //listView.oniteminvoked = options.oniteminvoked;
-            listView.addEventListener('iteminvoked', function (args) {
-                let feedSrc = feed.current || feed.previous;
-                let item = feedSrc[args.detail.itemIndex];
-                WinJS.Namespace.define('Reason', {
-                    currentItem: item
-                });
-                WinJS.Navigation.navigate("/pages/item/item.html", { item: Reason.currentItem, type: 'Blog' });
-                Helpers.saveLVPosition(listView);
+            WinJS.Utilities.query('button.donateBtn', element).listen('click', function (e) {
+                let uri = new Windows.Foundation.Uri('https://reason.com/donatenow/donate.php');
+                Windows.System.Launcher.launchUriAsync(uri).done();
             });
         },
 

@@ -274,3 +274,42 @@
 .hide {
     display: none;
 }
+
+.sectionDonatepage {
+    font-size: 18px;
+}
+
+.sectionDonatepage p:first-of-type {
+    margin-top: 0px;
+}
+.sectionDonatepage p.incentive {
+    text-align: center;
+    font-size: 1.1em;
+}
+.sectionDonatepage button {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 1.6em;
+    padding: 5px 15px;
+    background-color: white;
+    color: black;
+}
+
+.sectionDonatepage blockquote {
+    font-style: italic;
+}
+
+.sectionDonatepage blockquote>footer {
+    margin-left: 20px;
+    font-weight: bold;
+}
+
+.sectionDonatepage .quotes {
+    border: 1px solid rgba(255,255,255,0.8);
+    border-radius: 5px;
+    background-color: rgba(255,255,255,0.2);
+    margin-top: 10px;
+}
