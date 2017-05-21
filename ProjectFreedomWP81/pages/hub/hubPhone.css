@@ -313,3 +313,15 @@
     background-color: rgba(255,255,255,0.2);
     margin-top: 10px;
 }
+
+.hubpage header[role='banner'] h1{
+    background-color: transparent;
+    background-image: url('/images/mainlogo.png');
+    background-position: 20px 10px;
+    background-size: 185px auto;
+    background-repeat: no-repeat;
+    min-width: 190px;
+    padding: 0;
+    margin: 0;
+    height: 60px;
+}
