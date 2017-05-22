@@ -54,7 +54,6 @@
 
     function removeAllArticles(e) {
         let msg = new Windows.UI.Popups.MessageDialog('Are you sure you want to delete all your saved articles?', 'Warning!');
-        msg.options
         msg.commands.append(new Windows.UI.Popups.UICommand('I am sure!'));
         msg.commands.append(new Windows.UI.Popups.UICommand('Hell, no!'));
         msg.showAsync().done(_removeAllArticlesHandler);
@@ -62,23 +61,27 @@
     }
 
     function _removeAllArticlesHandler(command) {
-        let complete = false;
+        //let complete = false;
         if (command.label === 'I am sure!') {
 
             console.log('removing articles...');
             Reason.savedArticles = [];
             let errMsg = 'Something went wrong. Try again later...';
+            let lv = Reason.currentData.element.querySelector('.itemslist').winControl;
+            lv.itemDataSource = new WinJS.Binding.List(Reason.savedArticles).dataSource;
             _updateLocalStorage(Reason.savedArticles, 'savedArticles.txt', errMsg).then(function success() {
-                complete = true;
+                
+                
+                //complete = true;
             });
-            return new WinJS.Promise(function (done, error, success) {
-                let intervalID = setInterval(function () {
-                    if (complete) {
-                        clearInterval(intervalID);
-                        done();
-                    }
-                }, 50);
-            });
+            //return new WinJS.Promise(function (done, error, success) {
+            //    let intervalID = setInterval(function () {
+            //        if (complete) {
+            //            clearInterval(intervalID);
+            //            done();
+            //        }
+            //    }, 50);
+            //});
             
         }
         

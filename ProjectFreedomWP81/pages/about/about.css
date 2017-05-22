@@ -18,11 +18,16 @@
     padding: 10px;
 }
 
-.aboutpage .content .privacy {
+.aboutpage .content .privacy, .license {
     border: 1px solid rgba(255,255,255,0.8);
     border-radius: 5px;
     background-color: rgba(255,255,255,0.2);
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 10px;
+}
+
+.aboutpage .content .license .github {
+    font-weight: bold;
+    text-decoration: underline;
 }

@@ -1,17 +1,17 @@
 ﻿(function () {
     "use strict";
-    let _deleteHandler = function (e) {
-        e.preventDefault();
-        Helpers.removeAllArticles().then(function () {
-            console.log('saved articles:');
-            console.log(Reason.savedArticles);
-            if (Reason.savedArticles.length === 0) {
-                console.log('listview refresh');
-                listView.itemDataSource = new WinJS.Binding.List(Reason.savedArticles).dataSource;
-            }
-        });
+    //let _deleteHandler = function (e) {
+    //    e.preventDefault();
+    //    Helpers.removeAllArticles().then(function () {
+    //        console.log('saved articles:');
+    //        console.log(Reason.savedArticles);
+    //        if (Reason.savedArticles.length === 0) {
+    //            console.log('listview refresh');
+    //            listView.itemDataSource = new WinJS.Binding.List(Reason.savedArticles).dataSource;
+    //        }
+    //    });
         
-    }
+    //}
     var ControlConstructor = WinJS.UI.Pages.define("/pages/hub/section6Page.html", {
         // This function is called after the page control contents 
         // have been loaded, controls have been activated, and 
@@ -80,6 +80,6 @@
 
     WinJS.Namespace.define("HubApps_SectionControls", {
         Section6Control: ControlConstructor,
-        _deleteHandler: _deleteHandler
+        //_deleteHandler: _deleteHandler
     });
 })();

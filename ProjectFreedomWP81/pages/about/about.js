@@ -12,8 +12,13 @@
             });
 
             WinJS.Utilities.query('.feedbackEmail', element).listen('click', function (e) {
-                let mailto = new Windows.Foundation.Uri("mailto:?to=mailto:developer@esar.biz" + "&subject=Reason WP8.1 app feedback" + "&body=I have some feedback");
+                let mailto = new Windows.Foundation.Uri("mailto:?to=mailto:developer@esar.biz" + "&subject=Reason app feedback" + "&body=version 1.0 for WP8.1");
                 Windows.System.Launcher.launchUriAsync(mailto).done();
+            });
+
+            WinJS.Utilities.query('.github', element).listen('click', function (e) {
+                let uri = new Windows.Foundation.Uri('https://github.com/ThorgalAegirsson/Reason-for-Windows-Phone-8.1');
+                Windows.System.Launcher.launchUriAsync(uri).done();
             });
 
             if (WinJS.Utilities.isPhone) {

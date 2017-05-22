@@ -26,7 +26,8 @@
             document.querySelector('#cmdAbout').addEventListener('click', Helpers.aboutButtonHandler, false);
             document.querySelector('#cmdRefresh').addEventListener('click', Helpers.refreshButtonHandler, false);
             document.querySelector('#cmdSettings').addEventListener('click', Helpers.settingsButtonHandler, false);
-            document.querySelector('#cmdFavRemoveAll').addEventListener('click', HubApps_SectionControls._deleteHandler, false);
+            //document.querySelector('#cmdFavRemoveAll').addEventListener('click', HubApps_SectionControls._deleteHandler, false);
+            document.querySelector('#cmdFavRemoveAll').addEventListener('click', Helpers.removeAllArticles, false);
 
             if (session.lastSectionIndex) hub.selectedIndex = session.lastSectionIndex;
             hub.onselectionchanged = function (args) {
