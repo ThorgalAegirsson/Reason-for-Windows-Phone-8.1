@@ -11,13 +11,6 @@
                 let uri = new Windows.Foundation.Uri('https://reason.com/donatenow/donate.php');
                 Windows.System.Launcher.launchUriAsync(uri).done();
             });
-        },
-
-        unload: function () {
-            WinJS.Namespace.define('Reason.currentData', {
-                feed: null,
-                element: null
-            });
         }
     });
 

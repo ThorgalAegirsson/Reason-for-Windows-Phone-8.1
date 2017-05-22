@@ -95,6 +95,10 @@
         console.log('settigns clicked');
     }
 
+    function aboutButtonHandler(e) {
+        WinJS.Navigation.navigate("/pages/about/about.html");
+    }
+
     function savePrevious(feed) {
         let fileName = 'previous' + feed.name + '.txt';
         _updateLocalStorage(feed.previous, fileName);
@@ -225,6 +229,7 @@
         loadLVPosition: loadLVPosition,
         refreshButtonHandler: refreshButtonHandler,
         settingsButtonHandler: settingsButtonHandler,
+        aboutButtonHandler: aboutButtonHandler,
         testConnection: testConnection,
         testOnline: testOnline
     });

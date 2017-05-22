@@ -1,0 +1,28 @@
+﻿html {
+    overflow: auto;
+    -ms-overflow-style:-ms-autohiding-scrollbar;
+}
+
+.aboutpage {
+    font-size: 14pt;
+}
+
+.aboutpage .titlearea {
+    text-align: center;
+}
+
+.aboutpage .content {
+    margin: 50px 20px 0 20px;
+}
+.aboutpage .content button {
+    padding: 10px;
+}
+
+.aboutpage .content .privacy {
+    border: 1px solid rgba(255,255,255,0.8);
+    border-radius: 5px;
+    background-color: rgba(255,255,255,0.2);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+}

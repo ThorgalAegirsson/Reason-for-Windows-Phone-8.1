@@ -22,7 +22,8 @@
 
             //appBar commands
             let appBar = document.querySelector('#appbar').winControl;
-            if (appBar) appBar.showOnlyCommands(['cmdRefresh', 'cmdSettings']);
+            if (appBar) appBar.showOnlyCommands(['cmdRefresh', 'cmdAbout']);
+            document.querySelector('#cmdAbout').addEventListener('click', Helpers.aboutButtonHandler, false);
             document.querySelector('#cmdRefresh').addEventListener('click', Helpers.refreshButtonHandler, false);
             document.querySelector('#cmdSettings').addEventListener('click', Helpers.settingsButtonHandler, false);
             document.querySelector('#cmdFavRemoveAll').addEventListener('click', HubApps_SectionControls._deleteHandler, false);
@@ -42,13 +43,13 @@
                 console.log(Reason.currentData.element);
                 switch (args.detail.item.header) {
                     case "Donate":
-                        appBar.showOnlyCommands(['cmdSettings']);
+                        appBar.showOnlyCommands(['cmdAbout']);
                         break;
                     case "Saved":
-                        appBar.showOnlyCommands(['cmdFavRemoveAll', 'cmdSettings']);
+                        appBar.showOnlyCommands(['cmdFavRemoveAll', 'cmdAbout']);
                         break;
                     default:
-                        appBar.showOnlyCommands(['cmdRefresh', 'cmdSettings']);
+                        appBar.showOnlyCommands(['cmdRefresh', 'cmdAbout']);
                 }
                 console.log('pivot item:');
                 console.log(args.detail.index);
