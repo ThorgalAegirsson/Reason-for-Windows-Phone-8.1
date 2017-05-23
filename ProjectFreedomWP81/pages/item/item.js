@@ -1,6 +1,9 @@
 ﻿(function () {
     "use strict";
     let sessionState = WinJS.Application.sessionState;
+
+    
+
     WinJS.UI.Pages.define("/pages/item/item.html", {
         // This function is called whenever a user navigates to this page. It
         // populates the page elements with the app's data.
@@ -12,6 +15,15 @@
                 currentItem: options.item,
                 type: options.type //not in use, for future syncing of favorites in Win10
             });
+
+            if (options.type) {
+                if (options.type === 'ReasonTV') {
+                    Helpers.createVideo(element, item);
+                }
+                if (options.type === "Podcast") {
+                    Helpers.createAudio(element, item);
+                }
+            }
             //console.log('item: ');
             //console.log(item);
             if (sessionState.history) item = sessionState.history.current.state.item;

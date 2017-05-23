@@ -44,7 +44,7 @@
                 WinJS.Namespace.define('Reason', {
                     currentItem: item
                 });
-                WinJS.Navigation.navigate("/pages/item/item.html", { item: Reason.currentItem, type: 'Blog' });
+                WinJS.Navigation.navigate("/pages/item/item.html", { item: Reason.currentItem, type: 'Podcast' });
                 Helpers.saveLVPosition(listView);
             });
         },

@@ -51,5 +51,33 @@
         margin-bottom:10px;
 
     }
+.video {
+    font-size: 16pt;
+    width: 90%;
+    margin-left: 5%;
+    text-align: center;
+}
+
+video {
+    width: 100%;
+}
+
+.audio {
+    font-size: 16pt;
+    width: 90%;
+    margin-left: 5%;
+    text-align: center;
+}
+
+audio {
+    width: 100%;
+}
+
+.btnDownload {
+    margin: 25px;
+    background-color: white;
+    border-radius: 5px;
+    color: black;
+}
 
         

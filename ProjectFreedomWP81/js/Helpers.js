@@ -217,6 +217,53 @@
         console.log(navigator.onLine);
     }
     
+    function createVideo(element, item) {
+        let divElement = document.createElement('div');
+        let hrElement = document.createElement('hr');
+        divElement.classList.add('video')
+        let pElement = document.createElement('p');
+        pElement.textContent = 'Video length: ' + item.media.duration;
+        let videoElement = document.createElement('video');
+        videoElement.src = item.media.src;
+        videoElement.setAttribute('controls')
+        //videoElement.classList.add('video');
+        let btn = document.createElement('button');
+        btn.textContent = 'Download the video';
+        btn.classList.add('btnDownload');
+        divElement.appendChild(hrElement);
+        divElement.appendChild(pElement);
+        divElement.appendChild(videoElement);
+        divElement.appendChild(btn);
+        btn.addEventListener('click', function (e) {
+            let uri = new Windows.Foundation.Uri(item.media.src);
+            Windows.System.Launcher.launchUriAsync(uri).done();
+        });
+        element.appendChild(divElement);
+    }
+
+    function createAudio(element, item) {
+        let divElement = document.createElement('div');
+        let hrElement = document.createElement('hr');
+        divElement.classList.add('audio')
+        let pElement = document.createElement('p');
+        pElement.textContent = 'Audio length: ' + item.media.duration;
+        let videoElement = document.createElement('audio');
+        videoElement.src = item.media.src;
+        videoElement.setAttribute('controls')
+        //videoElement.classList.add('video');
+        let btn = document.createElement('button');
+        btn.textContent = 'Download the audio';
+        btn.classList.add('btnDownload');
+        divElement.appendChild(hrElement);
+        divElement.appendChild(pElement);
+        divElement.appendChild(videoElement);
+        divElement.appendChild(btn);
+        btn.addEventListener('click', function (e) {
+            let uri = new Windows.Foundation.Uri(item.media.src);
+            Windows.System.Launcher.launchUriAsync(uri).done();
+        });
+        element.appendChild(divElement);
+    }
 
     //export methods
     WinJS.Namespace.define('Helpers', {
@@ -234,6 +281,8 @@
         settingsButtonHandler: settingsButtonHandler,
         aboutButtonHandler: aboutButtonHandler,
         testConnection: testConnection,
-        testOnline: testOnline
+        testOnline: testOnline,
+        createVideo: createVideo,
+        createAudio: createAudio
     });
 })();
