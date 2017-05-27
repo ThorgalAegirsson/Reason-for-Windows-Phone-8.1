@@ -29,7 +29,7 @@
                 savedArticles: sessionState.reasonSavedArticles
             });
             WinJS.Binding.processAll(element, item);
-            element.querySelector('.raw').textContent = item.content;
+            //element.querySelector('.raw').textContent = item.content;
 
             //sharing contract init
             let dataTransferManager = Windows.ApplicationModel.DataTransfer.DataTransferManager.getForCurrentView();
