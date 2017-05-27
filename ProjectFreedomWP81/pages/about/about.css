@@ -6,7 +6,10 @@
 .aboutpage {
     font-size: 14pt;
 }
-
+.aboutpage p {
+    margin-top:5px;
+    margin-bottom: 5px;
+}
 .aboutpage .titlearea {
     text-align: center;
 }

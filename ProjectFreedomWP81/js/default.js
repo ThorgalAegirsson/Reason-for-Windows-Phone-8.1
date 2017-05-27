@@ -21,15 +21,6 @@
                 
             }
 
-            //console.log('RESUME ACTIVATED');
-            //allFeeds = app.sessionState.reasonAllFeeds;
-            //currentItem = app.sessionState.reasonCurrentItem;
-            //roamingData = app.sessionState.reasonRoamingData;
-            //console.log('app sessionstate after resume:');
-            //console.log(app.sessionState);
-            //debugger;
-
-
             hookUpBackButtonGlobalEventHandlers();
             nav.history = app.sessionState.history || {};
             nav.history.current.initialPlaceholder = true;
@@ -45,16 +36,6 @@
             });
 
             args.setPromise(p);
-            
-            //if (allFeeds) WinJS.Namespace.define('Reason', {
-            //    allFeeds: allFeeds
-            //});
-            //if (currentItem) WinJS.Namespace.define('Reason', {
-            //    currentItem: currentItem
-            //});
-            //if (roamingData) WinJS.Namespace.define('Reason', {
-            //    roamingData: roamingData
-            //});
         }
     });
 
@@ -66,11 +47,7 @@
         
         app.sessionState.history = nav.history;
         app.sessionState.reasonSavedArticles = Reason.savedArticles;
-        //app.sessionState.reasonCurrentItem = Reason.currentItem;
-        //app.sessionState.reasonRoamingData = Reason.roamingData;
-        console.log('app sessionstate on checkpoint: ');
-        console.log(app.sessionState);
-        debugger;
+        //debugger;
     };
 
     function hookUpBackButtonGlobalEventHandlers() {

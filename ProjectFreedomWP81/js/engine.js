@@ -1,6 +1,5 @@
 ﻿(function () {
     'use strict';
-    WinJS.Utilities.startLog('retrieveFeed1 pageControl1');
     console.clear();
 
     //Saved articles into local storage
@@ -10,10 +9,7 @@
     appData.localFolder.getFileAsync('savedArticles.txt')
         .then(function (file) {
             return Windows.Storage.FileIO.readTextAsync(file);
-            //console.log('savedArticles open');
         }, function error(file) {
-            //appData.localFolder.createFileAsync('savedArticles.txt');
-            //console.log('savedArticles created');
             })
         .then(function (contents) {
             if (contents) savedArticles = JSON.parse(contents);
@@ -24,12 +20,11 @@
     //END OF LOCAL STORAGE
 
 
-    //let complete = false;
+    let el = null;
     let currentFeed = null;
     let mediaFeed = false;
     let orgFeed = false;
     let currentItemIndex;
-    //let defaultPic = '';
     let ReasonFeed = {
         Blog: {
             name: 'Blog',
@@ -75,49 +70,29 @@
 
     
 
-    function retrieveFeed(feed, lv) {
-        console.log("RETRIEVE FEED STARTED:");
+    function retrieveFeed(feed, lv, element) {
+        el = element;
         let complete = false;
-        //defaultPic = '/images/reasonlogo.png';
         mediaFeed = false;
         orgFeed = false;
         let feedArr = [];
         let client = new Windows.Web.Syndication.SyndicationClient();
-        console.log('feed:');
-        console.log(feed);
         let url = feed.url;
         if (url === 'http://reason.org/news/index.xml') {
-            //console.log('default pic changed');
-            //defaultPic = 'http://reason.org/media/images/logo.png';
             orgFeed = true;
         }
         let uri = null;
         try {
             uri = new Windows.Foundation.Uri(url);
-            WinJS.log && WinJS.log('log uri ' + uri, 'retrieveFeed', 'INFO');
         } catch (err) {
-            console.log('error while setting uri:');
-            console.log(err);
-            WinJS.log && WinJS.log('Error: Invalid URI' + err, 'retrieveFeed', 'ERROR');
         }
-        WinJS && WinJS.log('start retrieving...', 'retrieveFeed', 'INFO');
         client.setRequestHeader("User-Agent", "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)");
 
         client.retrieveFeedAsync(uri).then(function (feedData) {
-            
-            console.log('feed url: ' + url);
-            //document.querySelector('.feedStatus').style.display = 'none';
             currentFeed = feedData;
-            WinJS.log && WinJS.log('Feed download complete', 'retrieveFeed retrieveFeedAsync', 'INFO');
             let title = '(no title)';
             if (currentFeed.title) title = currentFeed.title.text;
-            //console.log('currentFeed.title: ' + title);
-            //document.querySelector('#outcome').innerText = title;
             mediaFeed = (title === 'Reason Video Podcast'||title === 'Reason Podcast') ? true : false;
-            WinJS && WinJS.log('mediaFeed: ' + mediaFeed, 'retrieveFeed retrieveFeedAsync', 'INFO');
-            console.log('media feed: ' + mediaFeed);
-            console.log('currentFeed:');
-            console.log(currentFeed);
             currentItemIndex = 0;
             if (currentFeed.items.size > 0) {
                 let feedSize = currentFeed.items.size;
@@ -127,20 +102,12 @@
                     if (currentItemIndex === feedSize - 1) complete = true;
                 }
             }
-            WinJS && WinJS.log("Items: " + currentFeed.items.size, 'retrieveFeed retrieveFeedAsync', 'INFO');
-            WinJS && WinJS.log("latest feedObject: ", 'retrieveFeed retrieveFeedAsync', 'INFO');
-            //console.log('feedArr that should go into feed.current:');
-            //console.log(feedArr);
-            //if (feedArr.length > 50) feedArr.splice(50);
             feed.current = feedArr;
-            //lv.itemDataSource = new WinJS.Binding.List(feedObject.current).dataSource;
             feed.previous = feedArr;
             return feed;
         }, onError, onProgress);
         return new WinJS.Promise(function (done, error, progress) {
             let intervalID = setInterval(function () {
-                //progress(doneFeed.length);
-                //console.log('is complete: ' + complete);
                 if (complete) {
                     done(feed);
                     clearInterval(intervalID);
@@ -150,86 +117,40 @@
     }
 
     function onProgress() {
-        //element.querySelector('.feedStatus').style.display = '';
-        WinJS.log && WinJS.log('downloading...', 'retrieveFeed promise', 'INFO');
     }
 
     function onError(err) {
-        console.log('FEED RETRIEVE ERROR => MessageDialog shows up !!!');
-        WinJS.log && WinJS.log(err, 'retrieveFeed promise', 'ERROR');
-        WinJS.log && WinJS.log("ERROR ERROR ERROR", 'retrieveFeed promise', 'ERROR');
         Windows.UI.Popups.MessageDialog("I couldn't download new articles. Make sure you're connected to the Internet.").showAsync();
-        //document.querySelector('.feedStatus').style.display = 'none';
-        //Helpers.readPrevious(feed, lv);
-        //document.querySelector('.feedStatus').textContent = "Couldn't download the articles!!!";
-        //document.querySelector('.feedStatus').style.display = '';
-        //window.setTimeout(function () {
-        //    if (document.querySelector('.feedStatus')) document.querySelector('.feedStatus').style.display = 'none';
-        //}, 5000);
+        if (el.querySelector('.feedStatus')) el.querySelector('.feedStatus').classList.add('hide');
         let errorStatus = Windows.Web.Syndication.SyndicationError.getStatus(err.number);
         if (errorStatus === Windows.Web.Syndication.SyndicationErrorStatus.invalidXml) console.log('An invalid XML exception was thrown. Please make sure to use a URI that points to a RSS or Atom feed');
     }
 
     function refreshFeed(feed, element) {
-        //let defaultPic = '';
-        //Helpers.testConnection();
-        console.log("REFRESH FEED STARTED WITH:");
-        console.log('element:');
-        console.log(element);
-        console.log('feed:');
-        console.log(feed);
         element.querySelector('.feedStatus').classList.remove('hide');
         let lv = element.querySelector('.itemslist');
         let listView = lv.winControl;
-        
-        WinJS.log && WinJS.log('feed refreshed', 'pageControl', 'INFO');
-        Reason.retrieve(feed, listView).done(
+
+        Reason.retrieve(feed, listView, element).done(
             function (feed) {
-                console.log('FEED REFRESH finished');
-                //element.querySelector('.feedStatus').style.display = 'none';
-                WinJS.log && WinJS.log('listview' + listView, 'pageControl', 'INFO');
-                WinJS.log && WinJS.log('                                              feed final:', 'pageControl', 'INFO');
-                WinJS.log && WinJS.log(feed, 'pageControl', 'INFO');
                 try {
                     // THIS HAPPENS ONLY SOMETIMES ALTHOUGH THE SITUATION IS EXACTLY THE SAME:
                     //When connection lost and then reconnected, user navigates to an item and back to the listview an error is thrown in UI.JS - why!?!
                     //Possibly I could return a promise with the feed and populate listview in section page itself, maybe that would help... If not - debug steps in ui.js
-                    console.log('feed.current that should go into listview after retrieve:');
-                    console.log(feed.current);
                     listView.itemDataSource = new WinJS.Binding.List(feed.current).dataSource;
-                    console.log('listview populated');
                 } catch (e) {
-                    console.log('ERROR WHILE POPULATING LISTVIEW INSIDE REFRESH:');
-                    console.log(e);
                 }
                 
                 feed.firstStart = false;
                 Helpers.savePrevious(feed);
-                //console.log('previous saved');
-                //console.log('status:');
-                //console.log(element.querySelector('.feedStatus'));
                 if (element.querySelector('.feedStatus')) element.querySelector('.feedStatus').classList.add('hide');
-                //console.log(element.querySelector('.feedStatus'));
-                console.log('listview that should show up:');
-                console.log(lv);
-                //lv.style.display = '';
             },
             function error() {
-                console.log("REFRESH ERROR");
                 if (element.querySelector('.feedStatus')) element.querySelector('.feedStatus').classList.add('hide');
-                //feed.firstStart = true;
                 Windows.UI.Popups.MessageDialog("I couln't download the articles. Check your internet connection").showAsync();
                 listView.itemDataSource = new WinJS.Binding.List(feed.previous).dataSource;
-                //lv.style.display = '';
-                //element.querySelector('.feedStatus').innerHTML = "<p>Something went wrong. Do you have the internet connection? Try again later...</p>"
-                //element.querySelector('.feedStatus').style.display = '';
-                //let intervalID = window.setTimeout(function () {
-                //    element.querySelector('.feedStatus').style.display = 'none';
-                //}, 5000);
-                WinJS.log && WinJS.log("ERROR ERROR ERROR refresfFeed failed", 'pageControl', 'INFO');
             },
             function progress(feedLength) {
-                WinJS.log && WinJS.log('                                               feed length: ' + feedLength, 'pageControl', 'INFO');
             }
         );
     }
@@ -269,9 +190,6 @@
         let day = date.getDate();
         let month = months[date.getMonth()];
         let year = date.getFullYear();
-        //if (day < 10) {
-        //    day = '0' + day.toString();
-        //}
         return month +' '+ day + ', ' + year;
     }
 
@@ -283,30 +201,22 @@
     function _createFeedObj(currentItemIndex, feedArr) {
         
         let defaultPic = '/images/reasonlogo.png';
-        console.log('currentFeed.title inside createfeedobj');
-        console.log(currentFeed.title.text);
         if (currentFeed.title.text === 'Reason Foundation -') {
-            console.log('default pic changed');
             defaultPic = 'http://reason.org/media/images/logo.png';
         }
         if (mediaFeed && currentFeed.imageUri) {
-            console.log('media pic');
             defaultPic = currentFeed.imageUri.absoluteUri;
         }
         let item = currentFeed.items[currentItemIndex];
-        WinJS && WinJS.log('ITEM DURATION:', 'createFeed', 'INFO');
-        WinJS && WinJS.log(item.duration, 'createFeed', 'INFO');
+
         let feedObject = {
             media:{}
         };
         let title = '(no title)';
         if (item.title) title = item.title.text;
         feedObject.title = title;
-        
-        WinJS && WinJS.log('Title: ' + feedObject.title, 'createFeed', 'INFO');
 
         if (item.links.size > 0) feedObject.link = item.links[0].uri.absoluteUri;
-        WinJS && WinJS.log('link: ' + feedObject.link, 'createFeed', 'INFO');
         
         let content = '(no content)';
         
@@ -316,15 +226,10 @@
             content = '<div>'+item.summary.text+'</div>';
         }
         feedObject.content = content;
-        WinJS && WinJS.log('Content: ' + feedObject.content, 'createFeed', 'INFO');
 
         if (item.summary) {
-            //WinJS && WinJS.log('item.summary:', 'createFeed', 'INFO');
-            //WinJS && WinJS.log(item.summary, 'createFeed', 'INFO');
             feedObject.summary = (item.summary.xml)?item.summary.xml.innerText : item.summary.text;
         };
-        WinJS && WinJS.log('summary:', 'createFeed', 'INFO');
-        WinJS && WinJS.log(feedObject.summary, 'createFeed', 'INFO');
 
         let author = [{
             name: '',
@@ -332,10 +237,7 @@
         }];
         if (item.authors&& !mediaFeed) {
             if (item.authors.size > 0) {
-                //debugger;
                 for (let i = 0; i < item.authors.size; i++) {
-                    //WinJS && WinJS.log('item.authors', 'createFeed', 'INFO');
-                    //WinJS && WinJS.log(item.authors, 'createFeed', 'INFO');
                     author[i] = {};
                     author[i].name = item.authors[i].name || '';
                     if (item.authors[i].uri) author[i].email = item.authors[i].uri.absoluteUri || '';
@@ -353,9 +255,6 @@
         published.articleDate = displayDate(published.date);
         published.articleDateName = displayDateNames(published.date);
         feedObject.published = published;
-        WinJS && WinJS.log('Published: ', 'createFeed', 'INFO');
-        WinJS && WinJS.log(published.articleDate, 'createFeed', 'INFO');
-        WinJS && WinJS.log(published.articleDateName, 'createFeed', 'INFO');
 
         //links
         
@@ -365,13 +264,7 @@
 
         //extensions overwriting previous values
         for (let i = 0; i < item.elementExtensions.size; i++) {
-            WinJS && WinJS.log('Extensions: ', 'createFeed', 'INFO');
-            WinJS && WinJS.log(item.elementExtensions, 'createFeed', 'INFO');
-            
             let extension = item.elementExtensions[i];
-            WinJS && WinJS.log(extension.nodeName, 'createFeed', 'INFO');
-            WinJS && WinJS.log(item.elementExtensions[i], 'createFeed', 'INFO');
-            
             switch (extension.nodeName) {
                 case 'origLink':
                     feedObject.origLink = extension.nodeValue; //link to the article in regular feeds
@@ -387,23 +280,13 @@
                     }
                     break;
             }
-            //if (item.elementExtensions[i].nodeName == 'origLink') {
-            //    feedObject.origLink = item.elementExtensions[i].nodeValue;
-            //}
         }
-        //feedObject.authors = authorStringOnly(feedObject.author);
-        //feedObject.authorsWithLinks = authorString(feedObject.author);
-        WinJS && WinJS.log('authors: ', 'createFeed', 'INFO');
-        WinJS && WinJS.log(feedObject.authors, 'createFeed', 'INFO');
-        WinJS && WinJS.log('original link: ' + feedObject.origLink, 'createFeed', 'INFO');
 
         let picSrc = '';
         let vidSrc = '';
         
         let contentHTML = _parseContent(feedObject.content);
         let firstPic = contentHTML.getElementsByTagName('div')[0].getElementsByTagName('img')[0];
-        console.log(firstPic);
-        console.log('orgFeed: ' + orgFeed);
         if (firstPic) {
             feedObject.picture = firstPic.src;
         } else {
@@ -412,39 +295,23 @@
         if (mediaFeed && currentFeed.imageUri) feedObject.picture = defaultPic;
         if (orgFeed) feedObject.picture = defaultPic;
 
-
-        WinJS && WinJS.log('media feed: ' + mediaFeed);
         let firstVid = contentHTML.getElementsByTagName('iframe')[0];
-        WinJS && WinJS.log('firstVid: ' + firstVid, 'createFeed', 'INFO');
         if (firstVid) {
             feedObject.media.src = firstVid.src;
-            WinJS && WinJS.log('video thumbnail: ' + feedObject.picture, 'createFeed', 'INFO');
-
         } else if (mediaFeed) {
-            WinJS && WinJS.log('mediafeed picture', 'createFeed', 'INFO');
             feedObject.media.src = feedObject.link;
             //feedObject.picture = videoToPicture('/images/Bajka.mp4');
         }
 
         feedObject.pictureSrc = 'url("' + feedObject.picture + '")';
         if (item.duration) feedObject.media.duration = item.duration.text;
-        
-        WinJS && WinJS.log('pic: ' + feedObject.picture, 'createFeed', 'INFO');
-        WinJS && WinJS.log('media: ' + feedObject.media.src, 'createFeed', 'INFO');
-        WinJS && WinJS.log('media duration: ' + feedObject.media.duration, 'createFeed', 'INFO')
-        WinJS && WinJS.log(item, 'createFeed', 'INFO');
-        //WinJS && WinJS.log(parseContent(feedObject.content), 'createFeed', 'INFO');
 
-        //document.querySelector('#WebView').innerHTML = window.toStaticHTML(content);
         feedArr.push(feedObject);
-        //WinJS && WinJS.log('feedArr:', 'createFeed', 'INFO');
-        //WinJS && WinJS.log(feedArr, 'createFeed', 'INFO');
     }
 
 
     WinJS.Namespace.define('Reason', {
         retrieve: retrieveFeed,
-        //currentFeed: 
         allFeeds: ReasonFeed,
         refreshFeed: refreshFeed,
         currentItem: null,
@@ -453,8 +320,4 @@
             element: null
         }
     });
-    //console.log('Reason.savedArticles after namespace assigning');
-    //console.log(Reason.savedArticles);
-
-    
 })();

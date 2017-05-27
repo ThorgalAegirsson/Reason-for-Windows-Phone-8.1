@@ -21,7 +21,6 @@
 
     .itempage.fragment header[role=banner] h2.titlearea .pagetitle {
         line-height: 1.2;
-        /*font-weight: bold;*/
     }
 
     .fragment header[role=banner] .titlearea .pagetitle {
@@ -36,10 +35,6 @@
     .fragment header[role=banner] a {
 
     }
-
-    /*.itempage.fragment header[role=banner] h3.author {
-        color: gray;
-    }*/
 
     .fragment header[role=banner] .date {
         padding-top: 10px;

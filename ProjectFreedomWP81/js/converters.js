@@ -9,14 +9,12 @@
     function processContent(contentHTML) {
         const content = _parseContent(contentHTML);
         const imgs = content.querySelectorAll('img');
-        //debugger;
         [].forEach.call(imgs, function (img) {
             img.style.maxWidth = '100%';
             img.style.height = 'auto';
         });
         let serializer = new XMLSerializer();
         let contentString = serializer.serializeToString(content);
-        console.log(contentString);
         return contentString;
     }
     //function ellipsizeTextBox(txt) { //not in use
@@ -57,10 +55,8 @@
             return authorStringOnly(authorlist);
         }),
         staticHTML: WinJS.Binding.converter(function (element) {
-            //let contentHTML = window.toStaticHTML(element);
             let processedContent = processContent(element);
             return window.toStaticHTML(processedContent);
         })
-        //ellipsizeTextBox: ellipsizeTextBox
     });
 })();

@@ -41,59 +41,14 @@
 		width: 780px;
 	}
 
-		/*.hubpage .hub .hero:-ms-lang(ar, dv, fa, he, ku-Arab, pa-Arab, prs, ps, sd-Arab, syr, ug, ur, qps-plocm) {
-			margin-left: 80px;
-			margin-right: -80px;
-		}*/
-
 		.hubpage .hub .hero .win-hub-section-header {
 			display: none;
 		}
 
-	/*.hubpage .hub .section1 {
-		width: 95vw;
-	}
-
-		.hubpage .hub .section1 .win-hub-section-content {
-			overflow-y: hidden;
-		}
-
-		.hubpage .hub .section1 .subtext {
-			margin-bottom: 7px;
-			margin-top: 9px;
-		}
-	
-		.hubpage .hub .section1 .title {
-			margin-top: 13px;
-			margin-bottom: 3px;
-		}
-
-		.hubpage .hub .section1 img {
-			width: 260px;
-			height: 260px;
-		}
-
-	.hubpage .hub .section2 {
-		width: 95vw;
-	}
-
-		.hubpage .hub .section2 .win-hub-section-content {
-			overflow-y: hidden;
-		}
-
-		.hubpage .hub .section2 .item-title {
-			margin-bottom: 16px;
-		}
-
-		.hubpage .hub .section2 .article-header {
-			margin-bottom: 24px;
-		}*/
-		
 	.hubpage .hub .section .lvcontenthost {
 	}
 
 	.hubpage .hub .section {
-        /*width: 95vw;*/
         margin-left: 20px;
 		margin-right: 0px;
 	}
@@ -147,42 +102,11 @@
 				margin-right: 12px;
 			}
 
-	/*.hubpage .hub .section4 {
-		width: 97vw;
-	}
 
-		.hubpage .hub .section4 .win-hub-section-content {
-			/*overflow-y: hidden; * /
-		} */
-
-		/*.hubpage .hub .section4 .top-image-row {
-			margin-bottom: 10px;
-			width: 100%;
-			height: 236px;
-		}
-
-			.hubpage .hub .section4 .top-image-row img {
-				width: 360px;
-				height: 236px;
-			}
-
-		.hubpage .hub .section4 .sub-image-row {
-			margin-bottom: 20px;
-			display: -ms-flexbox;
-			-ms-flex-flow: row nowrap;
-			-ms-flex-pack: justify;
-			width: 360px;
-		}
-
-			.hubpage .hub .section4 .sub-image-row img {
-				height: 113px;
-				width: 113px;
-			}*/
-			
-	.hubpage .hub .section {
+	/*.hubpage .hub .section {
 		margin-left: 20px;
 		margin-right: 0px;
-	}
+	}*/
 		
 .label-extralarge {
 	font-size: 28pt;
@@ -207,19 +131,10 @@
 
 .logo {
     height:100px;
-    /*flex: 0 0 0;*/
-    /*height: 98px;*/
-    /*max-width: 98px;*/
     background-size: cover;
     background-position: center center;
-    /*background-image: url('/images/Reasonlogo.png');*/
-    /*position: relative;*/
     -ms-grid-column: 1;
     padding: 0;
-}
-
-.sectionLVpage .templatecontainer {
-    
 }
 
 .sectionLVpage .itemcontainer {
@@ -254,10 +169,6 @@
 }
 
 .sectionLVpage .feedStatus .feedLoadingProgress {
-    /*margin-left: 25vw;
-    margin-right: auto;
-    width: 50vw;*/
-    /*width: inherit;*/
     margin-top: 0;
     margin-bottom: 0;
 }
@@ -265,10 +176,6 @@
 .fragment .sectionLVpage .feedStatus {
     height: 20px;
     margin-top: -10px;
-}
-
-.hubpage .hub .section3 .itemslist {
-    /*height: 75vh;*/
 }
 
 .hide {

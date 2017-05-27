@@ -21,6 +21,17 @@
                 Windows.System.Launcher.launchUriAsync(uri).done();
             });
 
+            WinJS.Utilities.query('.rateApp', element).listen('click', function (e) {
+                let uri = new Windows.Foundation.Uri('ms-windows-store://review/?ProductId=9n58mspggxqx ');
+                //let uri = new Windows.Foundation.Uri('ms-windows-store://reviewapp/?AppId=ca05b3ab-f157-450c-8c49-a1f127f5e71d'); //for Windows Phone 7/8.x)
+                Windows.System.Launcher.launchUriAsync(uri).done();
+            });
+
+            //WinJS.Utilities.query('.myApps', element).listen('click', function (e) {
+            //    let uri = new Windows.Foundation.Uri('ms-windows-store://publisher/?name=Radek Szumski');
+            //    Windows.System.Launcher.launchUriAsync(uri).done();
+            //});
+
             if (WinJS.Utilities.isPhone) {
                 document.getElementById("backButton").style.display = "none";
             }

@@ -10,7 +10,7 @@
         ready: function (element, options) {
             // TODO: Initialize the page here.
             
-            let item = options.item; //defined in section3page.js
+            let item = options.item; 
             WinJS.Namespace.define('Reason', {
                 currentItem: options.item,
                 type: options.type //not in use, for future syncing of favorites in Win10
@@ -24,25 +24,17 @@
                     Helpers.createAudio(element, item);
                 }
             }
-            //console.log('item: ');
-            //console.log(item);
             if (sessionState.history) item = sessionState.history.current.state.item;
-            //console.log('item from history: ');
-            //console.log(sessionState);
-            //console.log(item);
             if (sessionState.reasonSavedArticles) WinJS.Namespace.define('Reason', {
                 savedArticles: sessionState.reasonSavedArticles
             });
-            //if (sessionState.reason) console.log(sessionState.reason);
             WinJS.Binding.processAll(element, item);
+            element.querySelector('.raw').textContent = item.content;
 
             //sharing contract init
             let dataTransferManager = Windows.ApplicationModel.DataTransfer.DataTransferManager.getForCurrentView();
             dataTransferManager.addEventListener('datarequested', Helpers.shareLink, false);
 
-            
-            //var item = Data.resolveItemReference(options.item);
-            
 			if (WinJS.Utilities.isPhone)
 			{
 				document.getElementById("backButton").style.display = "none";
