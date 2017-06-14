@@ -34,8 +34,21 @@
             Reason.savedArticles[index] = item;
         }
         let errMsg = "I couldn't save your article. Spare me! I beg you!";
-        _updateLocalStorage(Reason.savedArticles, 'savedArticles.txt', errMsg);
-   }
+        _updateLocalStorage(Reason.savedArticles, 'savedArticles.txt', errMsg, true);
+    }
+
+    function articleInSaved(e) {
+        let item = Reason.currentItem;
+        let savedArticles = Reason.savedArticles.map(function (savedItem) {
+            return savedItem.origLink;
+        });
+        let index = savedArticles.indexOf(item.origLink);        
+        if (index === -1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     function removeArticle(e) {
         let item = Reason.currentItem;
@@ -46,7 +59,7 @@
         if (index === -1) return;
         Reason.savedArticles.splice(index, 1);
         let errMsg = "I couldn't remove your article. Spare me! I beg you!";
-        _updateLocalStorage(Reason.savedArticles, 'savedArticles.txt', errMsg);
+        _updateLocalStorage(Reason.savedArticles, 'savedArticles.txt', errMsg, false);
     }
 
     function removeAllArticles(e) {
@@ -86,10 +99,21 @@
         _updateLocalStorage(feed.previous, fileName);
     }
 
-    function _updateLocalStorage(articleList, fileName, errMsg) {
+    function _updateLocalStorage(articleList, fileName, errMsg, isInSaved) {
         let appData = Windows.Storage.ApplicationData.current;
         appData.localFolder.createFileAsync(fileName, Windows.Storage.CreationCollisionOption.replaceExisting)
             .then(function (file) {
+                //change appBar icon
+                let appBar = document.querySelector('#appbar').winControl;
+                if (appBar && isInSaved !== undefined) {
+                    if (isInSaved) {
+                        appBar.showOnlyCommands(['articleFavRemove', 'articleBrowser', 'articleShare']);
+
+                    } else {
+                        appBar.showOnlyCommands(['articleFav', 'articleBrowser', 'articleShare']);
+                    }
+                }
+                
                 return Windows.Storage.FileIO.writeTextAsync(file, JSON.stringify(articleList));
             }, function (error) {
                 let msg = errMsg || 'Something went wrong with localStorage file';
@@ -221,6 +245,7 @@
         showShareUI: showShareUI,
         shareLink: shareLink,
         saveArticle: saveArticle,
+        articleInSaved: articleInSaved,
         removeArticle: removeArticle,
         removeAllArticles: removeAllArticles,
         savePrevious: savePrevious,

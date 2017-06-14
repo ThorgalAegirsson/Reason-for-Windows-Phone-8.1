@@ -1,10 +1,10 @@
 ﻿.win-pivot .win-pivot-surface {
-	height: 75vh;
+	height: 80vh;
 }
 
 .win-pivot .win-pivot-viewport {
 	padding-top: 0px;
-	margin-top: 98px;
+	margin-top: 75px;
 }
 
 .win-pivot-item .win-pivot-item-content {
@@ -54,7 +54,7 @@
 	}
 	
 		.hubpage .hub .section .itemslist {
-			height: 71vh;
+			height: 75vh;
 			margin-top: -5px;
 			margin-right: 20px;
 		}
@@ -222,6 +222,7 @@
 }
 
 .hubpage header[role='banner'] h1{
+    /*background-attachment: fixed;*/
     background-color: transparent;
     background-image: url('/images/mainlogo.png');
     background-position: 20px 10px;
@@ -231,4 +232,6 @@
     padding: 0;
     margin: 0;
     height: 60px;
+    /*top:10px;
+    left: 20px;*/
 }

@@ -48,6 +48,7 @@
     <AppxManifest Include="package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="css\changelog.css" />
     <Content Include="css\phone.css" />
     <Content Include="images\mainlogo.png" />
     <Content Include="images\Reasonlogo.png" />
@@ -70,6 +71,7 @@
     <Content Include="images\SplashScreen.scale-240.png" />
     <Content Include="images\StoreLogo.scale-240.png" />
     <Content Include="images\gray.png" />
+    <Content Include="js\changelog.js" />
     <Content Include="js\converters.js" />
     <Content Include="js\default.js" />
     <Content Include="js\engine.js" />
