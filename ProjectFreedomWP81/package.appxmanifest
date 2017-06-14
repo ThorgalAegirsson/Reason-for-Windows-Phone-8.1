@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
-  <Identity Name="cc252859-0c87-414f-8885-2f3a2dfd4925" Version="1.0.0.0" Publisher="CN=eugen" />
-  <mp:PhoneIdentity PhoneProductId="cc252859-0c87-414f-8885-2f3a2dfd4925" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="29322RadekSzumski.ReasonforWP8.1" Version="1.0.0.0" Publisher="CN=30977CED-A447-45DB-A43A-D44A4E451998" />
+  <mp:PhoneIdentity PhoneProductId="46325a89-262c-4b70-9dea-e1d578aac214" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>ProjectFreedomWP81</DisplayName>
-    <PublisherDisplayName>eugen</PublisherDisplayName>
+    <DisplayName>Reason for WP 8.1</DisplayName>
+    <PublisherDisplayName>Radek Szumski</PublisherDisplayName>
     <Logo>images\StoreLogo.png</Logo>
   </Properties>
   <Prerequisites>

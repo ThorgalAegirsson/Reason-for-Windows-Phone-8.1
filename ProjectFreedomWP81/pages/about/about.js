@@ -12,7 +12,7 @@
             });
 
             WinJS.Utilities.query('.feedbackEmail', element).listen('click', function (e) {
-                let mailto = new Windows.Foundation.Uri("mailto:?to=mailto:developer@esar.biz" + "&subject=Reason app feedback" + "&body=version 1.0 for WP8.1");
+                let mailto = new Windows.Foundation.Uri("mailto:?to=mailto:developer@esar.biz" + "&subject=Reason app feedback" + "&body=version 1.1.0.0 for WP8.1");
                 Windows.System.Launcher.launchUriAsync(mailto).done();
             });
 
@@ -23,7 +23,10 @@
 
             WinJS.Utilities.query('.rateApp', element).listen('click', function (e) {
                 let uri = new Windows.Foundation.Uri('ms-windows-store://review/?ProductId=9n58mspggxqx ');
-                //let uri = new Windows.Foundation.Uri('ms-windows-store://reviewapp/?AppId=ca05b3ab-f157-450c-8c49-a1f127f5e71d'); //for Windows Phone 7/8.x)
+                //let uri = new Windows.Foundation.Uri('ms-windows-store://review/?PFN=29322RadekSzumski.ReasonforWP8.1_4bxt4xfcq7jzt');
+                //let uri = new Windows.Foundation.Uri('ms-windows-store:reviewapp?AppId=f95d8469-8239-4aa4-bb97-64c205726930'); //for Windows Phone 7/8.x
+                //let uri = new Windows.Foundation.Uri('ms-windows-store://REVIEW/?AppId=63c2a117-8604-44e7-8cef-df10be3a57c8');
+                //let uri = new Windows.Foundation.Uri('http://www.windowsphone.com/s?AppId=63c2a117-8604-44e7-8cef-df10be3a57c8');
                 Windows.System.Launcher.launchUriAsync(uri).done();
             });
 

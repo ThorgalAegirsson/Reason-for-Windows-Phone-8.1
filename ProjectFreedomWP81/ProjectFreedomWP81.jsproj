@@ -43,11 +43,14 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.VisualStudio.$(WMSJSProject).props" />
   <PropertyGroup>
     <DefaultLanguage>en-US</DefaultLanguage>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxBundlePlatforms>neutral</AppxBundlePlatforms>
   </PropertyGroup>
   <ItemGroup>
     <AppxManifest Include="package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="css\changelog.css" />
     <Content Include="css\phone.css" />
     <Content Include="images\mainlogo.png" />
     <Content Include="images\Reasonlogo.png" />
@@ -70,6 +73,7 @@
     <Content Include="images\SplashScreen.scale-240.png" />
     <Content Include="images\StoreLogo.scale-240.png" />
     <Content Include="images\gray.png" />
+    <Content Include="js\changelog.js" />
     <Content Include="js\converters.js" />
     <Content Include="js\default.js" />
     <Content Include="js\engine.js" />
@@ -77,6 +81,7 @@
     <Content Include="js\Helpers.js" />
     <Content Include="js\navigator.js" />
     <Content Include="msapp-error.html" />
+    <None Include="Package.StoreAssociation.xml" />
     <Content Include="pages\about\about.css" />
     <Content Include="pages\about\about.html" />
     <Content Include="pages\about\about.js" />

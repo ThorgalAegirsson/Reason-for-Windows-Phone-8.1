@@ -10,20 +10,45 @@
         ready: function (element, options) {
             // TODO: Initialize the page here.
             
-            let item = options.item; 
+            let item = options.item;
             WinJS.Namespace.define('Reason', {
                 currentItem: options.item,
                 type: options.type //not in use, for future syncing of favorites in Win10
             });
 
-            if (options.type) {
-                if (options.type === 'ReasonTV') {
+            if (item.media.src) {
+                let mediaType = item.media.src;
+                if (/[.]mp3$/.test(mediaType)) {
+                    Helpers.createAudio(element, item);
+                } else if (/[.]mp4$/.test(mediaType)) {
                     Helpers.createVideo(element, item);
                 }
-                if (options.type === "Podcast") {
-                    Helpers.createAudio(element, item);
-                }
             }
+
+            // Youtube videos inside articles -> still not working...
+            //function createYTvideo(element, item) {
+            //    let divElement = document.createElement('div');
+            //    let hrElement = document.createElement('hr');
+            //    divElement.classList.add('video')
+            //    let videoElement = document.createElement('video');
+            //    videoElement.src = item;
+            //    videoElement.setAttribute('controls')               
+            //    divElement.appendChild(hrElement);
+            //    divElement.appendChild(item);
+            //    element.appendChild(divElement);
+            //    return divElement;
+            //}
+            //let webview = document.createElement('x-ms-webview');
+            //let iframe = '<iframe src="' + item.media.src + '" width="100%" height="auto" allowfullscreen="allowfullscreen"></iframe>';
+            //webview.navigateToString(iframe);
+
+            //webview.style.width = "100%";
+            //webview.style.height = 'auto';
+            //webview.setAttribute('allowfullscreen', 'allowfullscreen');
+            //webview.src = item.media.src;
+            //element.appendChild(webview);
+            
+
             if (sessionState.history) item = sessionState.history.current.state.item;
             if (sessionState.reasonSavedArticles) WinJS.Namespace.define('Reason', {
                 savedArticles: sessionState.reasonSavedArticles
@@ -41,15 +66,12 @@
             }
             //configure appbar
 			let appBar = document.querySelector('#appbar').winControl;
-			if (options.type === 'savedArticles') {
+			if (Helpers.articleInSaved()) {
 			    if (appBar) appBar.showOnlyCommands(['articleFavRemove', 'articleBrowser', 'articleShare']);
-			    document.querySelector('#articleFavRemove').addEventListener('click', Helpers.removeArticle, false);
 			} else {
 			    if (appBar) appBar.showOnlyCommands(['articleFav', 'articleBrowser', 'articleShare']);
-			    document.querySelector('#articleFav').addEventListener('click', Helpers.saveArticle, false);
 			}
-			document.querySelector('#articleBrowser').addEventListener('click', Helpers.openLink, false);
-			document.querySelector('#articleShare').addEventListener('click', Helpers.showShareUI, false);
+			
         },
         unload: function () {
             //cancel sharing contract

@@ -127,6 +127,7 @@
     }
 
     function refreshFeed(feed, element) {
+        
         element.querySelector('.feedStatus').classList.remove('hide');
         let lv = element.querySelector('.itemslist');
         let listView = lv.winControl;
@@ -139,6 +140,7 @@
                     //Possibly I could return a promise with the feed and populate listview in section page itself, maybe that would help... If not - debug steps in ui.js
                     listView.itemDataSource = new WinJS.Binding.List(feed.current).dataSource;
                 } catch (e) {
+
                 }
                 
                 feed.firstStart = false;
@@ -222,6 +224,8 @@
         
         if (item.content) {
             content = item.content.text;
+            content = content.replace('href="//reason.com', 'href="http://reason.com');
+
         } else if (item.summary) {
             content = '<div>'+item.summary.text+'</div>';
         }

@@ -23,6 +23,10 @@
             document.querySelector('#cmdRefresh').addEventListener('click', Helpers.refreshButtonHandler, false);
             document.querySelector('#cmdSettings').addEventListener('click', Helpers.settingsButtonHandler, false);
             document.querySelector('#cmdFavRemoveAll').addEventListener('click', Helpers.removeAllArticles, false);
+            document.querySelector('#articleFavRemove').addEventListener('click', Helpers.removeArticle, false);
+            document.querySelector('#articleFav').addEventListener('click', Helpers.saveArticle, false);
+            document.querySelector('#articleBrowser').addEventListener('click', Helpers.openLink, false);
+            document.querySelector('#articleShare').addEventListener('click', Helpers.showShareUI, false);
 
             if (session.lastSectionIndex) hub.selectedIndex = session.lastSectionIndex;
             hub.onselectionchanged = function (args) {
